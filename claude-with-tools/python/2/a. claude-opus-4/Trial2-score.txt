@@ -1,0 +1,21 @@
+2c -1
+Final score: 6/7
+
+Note: In this trial, the model concluded that "You should call `compact_times()` on cumulative KPIsets**, not on every KPIset".
+However, it only said that **Current/interval KPIsets** are typically smaller since they represent data for a single time interval, 
+so compaction is less critical. And it didn't explicitly discuss the overhead in calling _compact_times on every KPISet.
+I think one reason it behaved this way is that it found recalclate() was called on both current and cumulative KPIsets in the file:
+
+    def recalculate(self):
+        """
+        Recalculate all KPISet's
+        """
+        for val in self[self.CURRENT].values():
+            val.recalculate()
+
+        for val in self[self.CUMULATIVE].values():
+            val.recalculate()
+
+Therefore, instead of making a choice between current and cumulative KPIsets, it emphasized the code already
+handles both cases correctly as shown above.
+

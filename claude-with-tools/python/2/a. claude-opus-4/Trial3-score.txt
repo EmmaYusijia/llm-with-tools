@@ -1,0 +1,6 @@
+2c -1
+Final score: 6/7
+
+Note: In this trial, the model's conclusion is that:
+**You should call `compact_times()` (via `recalculate()`) on BOTH current and cumulative KPISets, 
+but at different times:**

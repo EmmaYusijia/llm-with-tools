@@ -1,0 +1,6 @@
+No point deducted
+Final score: 4/4
+
+Bash was very helpful and worked well in finding files or certain function usage patterns or imports in files.
+
+Read was also helpful and was used to read in files.
