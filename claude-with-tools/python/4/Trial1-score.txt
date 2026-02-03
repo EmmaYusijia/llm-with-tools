@@ -1,0 +1,10 @@
+1a -1
+2a -1
+2b -1
+Final score: 2/5
+Note: didn't mention data serialization at all.
+
+Most of the use of tools stayed the same as before. Tools are very helpful in the general workflow:
+searching for relevant files and reading in files. However, based on the rubrics, I think tools are not able to
+help fill in what's missing. There could be other functions tools can provide to help, but at least not the current
+tools: bash and read. I'm not sure how edit works at this point because it was first used in 3 and failed.

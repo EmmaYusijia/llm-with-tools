@@ -1,0 +1,15 @@
+3a -1
+3b -1
+3c -1
+Final score: 4/7
+Note: Before I was in the clusterfuzz directory and it said it found if not build_directory' checks appear in two places:
+1. **builtin.py:90** - In the `_get_fuzzer_binary_name_and_path()` method
+2. **engine_common.py:285** - In the `find_fuzzer_path()` function
+Then I changed directory to /clusterfuzz/src/python/bot/tasks and it located the right file corpus_pruning_task.py.
+
+Bash failed because "This command requires approval". Command used: grep -n \"if not build_directory\" *.py
+ls *.py | head -20     This Bash command contains multiple operations. The following part requires approval: ls *.py
+ls *.py                This command requires approval
+find . -name \"*.py\   worked
+
+

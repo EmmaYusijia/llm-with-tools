@@ -1,3 +1,5 @@
 1a -1 
-1b -1
+1b -1 (didn't explicitly mention that but said:
+"If a user needs to use non-ASCII domain names, they should:\n- Use IDNA encoding (Punycode) for the domain name
+Or let the higher-level APIs handle the conversion automatically")
 Final score: 2/4

@@ -1,0 +1,8 @@
+1a -1
+2a -1
+2b -1
+Final Score: 2/5
+Note: At the end it mentioned:
+"The deep copy ensures that the original reply object remains unchanged while allowing you to create a modified 
+version for specific purposes (like serialization before storing in the ledger)."
+It touched on serialization a little bit but ended there.
