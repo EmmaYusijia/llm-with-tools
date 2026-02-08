@@ -1,0 +1,24 @@
+Based on my analysis of the code, **yes, you do need to call `deepcopy(result)` before modifying `result[DATA]`** in the `storeTxnAndSendToClient` method. 
+
+Here's why:
+1. **The current code already does this** (line 573): 
+For `SCHEMA` and `ISSUER_KEY` transaction types, the code creates a deep copy before modifying `result[DATA]`.
+
+2. **The reason is important**: 
+Looking at the flow:
+- `result = reply.result` (line 571) - this creates a reference to the reply's result dictionary
+- After modifying `result`, it's passed to `storeTxnInLedger` (line 576)
+- Later, `reply.result` is still used (line 585-586) to update with sequence number and store in graph  
+
+3. **Without deepcopy, you would modify the original**: 
+If you don't deepcopy before modifying `result[DATA]`, you're modifying the original `reply.result` object, which could cause issues when:
+- The original data is needed later in the process (like in `storeTxnInGraph`)
+- The serialized version shouldn't replace the original data structure
+
+4. **Pattern in the codebase**: 
+Looking at other methods like `storeTxnInGraph` (line 621) and `hashAttribTxn` (line 609), 
+they also use `deepcopy(result)` before modifying the result dictionary, showing this is a consistent pattern to avoid mutating shared data.
+
+So if you're adding code to modify `result[DATA]` for other transaction types, you should follow the same pattern:
+```python\nif result[TXN_TYPE] in (YOUR_TXN_TYPES):\n    result = deepcopy(result)\n    result[DATA] = # your modification\n```
+This ensures you don't accidentally modify data that might be used elsewhere in the system.

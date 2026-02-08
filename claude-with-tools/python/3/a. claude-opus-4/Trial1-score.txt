@@ -1,6 +1,5 @@
 1a -1 (only mentioned UTF-8 might seem more flexible)
-1b -1
-Final score: 2/4
+Final score: 3/4
 
 Most of the use of tools stayed the same as before except the following:
 1. Bash was used to check git history for ASCII decode in cookies.py,

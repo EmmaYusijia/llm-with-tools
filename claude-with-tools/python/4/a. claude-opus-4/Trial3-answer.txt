@@ -1,0 +1,29 @@
+Based on my analysis of the code, here's when you need to use `deepcopy(result)` before modifying `result[DATA]`:
+
+**You NEED to use `deepcopy(result)` when:**
+1. **You're modifying a result that came from another source** (like `reply.result`) and you don't want to modify the original object. 
+For example, in `storeTxnAndSendToClient()` at line 572-574:
+```python\n   result = reply.result\n   if result[TXN_TYPE] in (SCHEMA, ISSUER_KEY):\n       result = deepcopy(result)\n       result[DATA] = jsonSerz.serialize(result[DATA], toBytes=False)\n   ```
+
+2. **You need to preserve the original data while creating a modified version**. 
+For example, in `hashAttribTxn()` at line 609:
+```python\n   # Creating copy of result so that `RAW`, `ENC` or `HASH` can be
+replaced by their hashes. We do not insert actual attribute data
+in the ledger but only the hash of it.
+result = deepcopy(result)\n   ```
+
+3. **You're removing or modifying fields for storage** while keeping the original intact. 
+For example, in `storeTxnInGraph()` at line 621:
+```python\n   result = deepcopy(result)\n   # Remove root hash and audit path from result if present since they can 
+be generated on the fly from the ledger so no need to store it
+result.pop(F.rootHash.name, None)\n   ```
+
+**You DON'T need `deepcopy(result)` when:**
+1. **You're creating a new result dictionary** from scratch, like in the various `processGet*Req()` methods where they create a new result dictionary and set `result[DATA]`:
+```python\n   result = {\n       TXN_ID: self.genTxnId(request.identifier, request.reqId)\n   }\n   result[DATA] = json.dumps(schema, sort_keys=True)\n   ```
+
+2. **You're directly working with a result you just created** in the same method and know it's not shared.
+
+**Summary:** 
+The key question is: Are you modifying a result object that might be used elsewhere? 
+If yes, use `deepcopy()`. If you're creating a new result dictionary or you're certain the result is local to your function and won't affect other parts of the code, you don't need `deepcopy()`.

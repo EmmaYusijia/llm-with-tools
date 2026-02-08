@@ -1,0 +1,34 @@
+Now I understand the context. Let me explain the difference between using HashMap and singletonMap as a parameter to messageParams:
+## Difference between HashMap and singletonMap for messageParams
+Looking at the code, the `messageParams` method expects a `HashMap<String, Message>` parameter. 
+In the test file at `/Users/emmayu/crqbench/projects/thunderbird-android/k9mail-library/src/test/java/com/fsck/k9/mail/store/imap/selectedstate/command/UidFetchCommandTest.java:110-111`, we see:
+```java\n.messageParams(fetchProfile, new HashMap<>(Collections.singletonMap(String.valueOf(uid),\n        (Message) createImapMessage(String.valueOf(uid)))))\n```
+Here's the key difference:
+1. **Collections.singletonMap**
+- Returns an **immutable** map with exactly one key-value pair
+- Cannot be modified after creation (no put, remove, etc.)
+- Memory efficient for single entries
+- Type: `Map<K, V>` (not specifically HashMap)
+
+2. **HashMap**
+- A **mutable** map implementation
+- Can be modified after creation
+- Less memory efficient for single entries
+- Type: `HashMap<K, V>`
+
+### Why wrap singletonMap in HashMap?
+The code wraps `Collections.singletonMap` with `new HashMap<>()` because:
+1. **Type requirement**: The `messageParams` method specifically expects a `HashMap<String, Message>`, not just any `Map`
+
+2. **Mutability**: If the code later needs to modify the map (though it doesn't appear to in this case), it needs a mutable HashMap
+
+3. **API consistency**: 
+The method signature enforces HashMap for consistency across the codebase
+
+### Alternative approaches:
+If you only need a single entry and don't need mutability, you could:
+- Change the method signature to accept `Map<String, Message>` instead of `HashMap<String, Message>`
+- Use a HashMap directly: `new HashMap<String, Message>() {{ put(key, value); }}`
+- Create a utility method to create single-entry HashMaps
+
+In this specific case, the wrapping seems unnecessary since the map is only used for reading in the fetch operation, but it's required due to the strict type signature of the `messageParams` method.

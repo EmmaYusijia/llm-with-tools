@@ -1,0 +1,24 @@
+Based on my analysis of the code, here's when you should call `compact_times()`:
+**You should call `compact_times()` on cumulative KPIsets**, not on every KPIset. 
+
+Here's why:
+1. **The method is automatically called during `recalculate()`** 
+- Look at line 170 in bzt/modules/aggregator.py:
+```python\n   def recalculate(self):\n       self._compact_times()\n       # ... rest of recalculation logic\n   ```
+
+2. **Purpose of `_compact_times()`**: 
+This method reduces the size of the response times distribution (stored in `self[RESP_TIMES]`) when it exceeds `rt_dist_maxlen` (default 1000). 
+It merges nearby response time entries to keep memory usage reasonable while preserving the statistical distribution.
+
+3. **When it matters most - Cumulative KPIsets**:
+- Cumulative KPIsets accumulate data over time and can grow very large
+- In `__merge_to_cumulative()` (line 425 in bzt/modules/aggregator.py), after merging data, `recalculate()` is called on the cumulative KPIset
+- This ensures the response time distribution stays manageable
+
+4. **Current/interval KPIsets** are typically smaller since they represent data for a single time interval, so compaction is less critical.
+The code already handles this correctly - `recalculate()` is called:
+- On cumulative KPIsets after merging (line 427 in bzt/modules/aggregator.py)
+- On source KPIsets before merging (line 229 in bzt/modules/aggregator.py)
+- On all KPIsets in DataPoint during `recalculate()` (lines 373, 376 in bzt/modules/aggregator.py)
+So you don't need to manually call `compact_times()` 
+- just ensure you call `recalculate()` when appropriate, and it will handle compaction automatically.

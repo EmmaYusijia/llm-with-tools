@@ -1,0 +1,25 @@
+Based on my analysis of the DGL codebase, I can explain the difference between `F.cross_entropy` and `cross_entropy`:
+In the context of PyTorch (which is commonly used with DGL):
+
+1. **`F.cross_entropy`** 
+- This is the standard PyTorch function from `torch.nn.functional` module. It's imported as:
+python import torch.nn.functional as F Then used as `F.cross_entropy()`. 
+This is the correct and standard way to calculate cross-entropy loss in PyTorch.
+
+2. **`cross_entropy`** (without the `F.` prefix) 
+- In the file `/Users/emmayu/crqbench/projects/dgl/examples/pytorch/rgcn/entity_classify.py:120`, 
+there's actually a bug where `cross_entropy` is called without the `F.` prefix. 
+This appears to be a typo or error in the code.
+
+The key differences:
+- `F.cross_entropy` is the proper PyTorch functional API for computing cross-entropy loss
+- `cross_entropy` alone would cause a `NameError` unless it's been imported or defined separately
+- In the RGCN example at line 120, it looks like someone forgot to add the `F.` prefix
+
+This is confirmed by looking at the pattern in the file:
+- Line 110: `loss = F.cross_entropy(...)` ✓ Correct
+- Line 120: `cross_entropy(...)` ✗ Missing F. prefix (bug)
+- Line 128: `test_loss = F.cross_entropy(...)` ✓ Correct
+
+So in summary, you should always use `F.cross_entropy` when working with PyTorch's functional API. 
+The bare `cross_entropy` in this codebase appears to be an error.

@@ -1,0 +1,22 @@
+Based on my analysis of the code, here's when `compact_times()` should be called:
+**You should call `compact_times()` (via `recalculate()`) on BOTH current and cumulative KPISets, but at different times:**
+1. **Current KPISets**: 
+The `_compact_times()` method is automatically called when `recalculate()` is invoked on current KPISets (line 373 in the `DataPoint.recalculate()` method).
+
+2. **Cumulative KPISets**: 
+The `_compact_times()` method is also called on cumulative KPISets when:
+- They are merged with new data and then `recalculate()` is called (line 427 in `__merge_to_cumulative()`)
+- When a KPISet is used as a source for merging (line 229 in `merge_kpis()`)
+The key insight is that `_compact_times()` is designed to keep the response time distribution (`RESP_TIMES`) from growing too large by consolidating nearby response time values when the number of unique response times exceeds `rt_dist_maxlen` (default 1000).
+
+**Why it's important for both:**
+- **For current KPISets**: Prevents memory issues during a single reporting interval
+- **For cumulative KPISets**: Even more critical since they accumulate data over the entire test run and would otherwise grow unbounded
+
+The compaction algorithm (lines 188-220) intelligently merges the closest response time pairs while preserving the statistical distribution by:
+1. Finding pairs of response times with the smallest differences
+2. Merging them proportionally based on their counts
+3. Maintaining precision based on the original values
+
+So to answer your question directly: 
+**Call `compact_times()` on every KPISet** (both current and cumulative) via the `recalculate()` method, which is the standard practice in the codebase.

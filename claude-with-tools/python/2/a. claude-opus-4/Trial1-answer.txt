@@ -1,0 +1,21 @@
+Based on my analysis of the code, here's the answer to your question:
+**You should call `compact_times()` on both current and cumulative KPISets**, 
+but it's already being handled automatically through the `recalculate()` method. 
+
+Here's why:
+1. **Automatic compaction via `recalculate()`**: 
+The `_compact_times()` method is private and is automatically called within `recalculate()` at line 170. 
+You don't need to call it directly.
+
+2. **When compaction happens**:
+- **Current KPISets**: Compacted via `recalculate()` at line 373 in the `DataPoint.recalculate()` method
+- **Cumulative KPISets**: Compacted via `recalculate()` at lines 376 (in DataPoint) and 427 (in `__merge_to_cumulative`)
+
+3. **Purpose of compaction**: The `_compact_times()` method (lines 188-220) reduces the number of response time data points when they exceed `rt_dist_maxlen` (default 1000). 
+It merges nearby timing values to keep memory usage manageable while maintaining statistical accuracy.
+
+4. **Why both need compaction**:
+- **Current KPISets**: Represent data for the current time interval and can accumulate many response time samples 
+- **Cumulative KPISets**: Accumulate all data over time and are even more likely to exceed the threshold
+The framework already handles this correctly - whenever `recalculate()` is called on a KPISet (whether current or cumulative), it will automatically compact the response times if needed. 
+You don't need to manually call `compact_times()` as it's a private method meant to be used internally by the `recalculate()` method.

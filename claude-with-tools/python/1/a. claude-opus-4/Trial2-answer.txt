@@ -1,0 +1,27 @@
+Based on my analysis of the codebase, I can explain the difference between `F.cross_entropy` and `cross_entropy`:
+
+## The Difference
+1. **`F.cross_entropy`** 
+- This is the correct usage. It refers to `torch.nn.functional.cross_entropy`, where `F` is typically imported as:
+python import torch.nn.functional as F
+This is the standard PyTorch functional API for computing cross-entropy loss.
+
+2. **`cross_entropy`** 
+- This appears to be a bug in the code! 
+Looking at `/Users/emmayu/crqbench/projects/dgl/examples/pytorch/rgcn/entity_classify.py:120`, 
+there's a line that calls: python cross_entropy(logits[val_idx], labels[val_idx])
+This is problematic because:
+- There's no import for a standalone `cross_entropy` function
+- The result isn't assigned to any variable
+- On line 123, the code tries to use `val_loss.item()` but `val_loss` was never defined
+- This will cause a runtime error when the code executes
+
+## The Bug
+The line should actually be:
+python\nval_loss = F.cross_entropy(logits[val_idx], labels[val_idx])
+
+This is clearly a typo where someone forgot to:
+1. Add the `F.` prefix
+2. Assign the result to `val_loss`
+Throughout the DGL codebase, the correct pattern is consistently `F.cross_entropy` for PyTorch examples and `mx.nd.softmax_cross_entropy` for MXNet examples. 
+There is no standalone `cross_entropy` function that should be used directly.

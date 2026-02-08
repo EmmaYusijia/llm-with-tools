@@ -1,0 +1,24 @@
+Found it! The check is at line 600 in corpus_pruning_task.py:600. 
+Let me analyze whether this check is necessary:
+Looking at the code:
+1. Line 598: `build_setup_result = build_manager.setup_build(revision=revision)`
+2. Line 599: `build_directory = environment.get_value('BUILD_DIR')`
+3. Line 600: `if not build_setup_result or not build_directory:`
+4. Line 604: `runner = Runner(build_directory, context)`
+
+The check for `if not build_directory` appears to be necessary because:
+1. **build_directory is used later**: On line 604, `build_directory` is passed to the `Runner` constructor. 
+Without this check, if `build_directory` is None or empty, it would cause issues in the Runner initialization.
+
+2. **Defense against environment issues**: 
+The `environment.get_value('BUILD_DIR')` call might return None or an empty string if the BUILD_DIR environment variable is not set properly, 
+which could happen if the build setup failed or if there's a configuration issue.
+
+3. **Fail-fast approach**: It's better to fail early with a clear error message (\"Failed to setup build.\") 
+rather than passing a None/empty build_directory to Runner and getting a more cryptic error later.
+
+Based on the recent commit message \"Make build setup result checking more strict in corpus pruning\", 
+it seems the developers intentionally made this check more strict to ensure both conditions are met before proceeding.
+
+**Conclusion**: Yes, the check for 'if not build_directory' is needed. 
+It ensures that the build directory is properly set before attempting to create a Runner instance that depends on it.

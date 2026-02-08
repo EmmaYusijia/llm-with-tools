@@ -1,0 +1,27 @@
+Based on my analysis of the DGL codebase, I can explain the difference between `F.cross_entropy` and `cross_entropy`:
+
+## The Difference
+1. **`F.cross_entropy`** 
+- This is the correct PyTorch function from `torch.nn.functional` module. 
+It's imported with: ```python\n   import torch.nn.functional as F\n   ```   
+Then used as `F.cross_entropy(predictions, targets)`
+
+2. **`cross_entropy`** (without prefix) 
+- This appears to be a bug in the code at `/Users/emmayu/crqbench/projects/dgl/examples/pytorch/rgcn/entity_classify.py:120`. 
+The code is trying to call `cross_entropy` without the `F.` prefix, but this function is not imported or defined anywhere in the file.
+
+## The Bug
+Looking at the code pattern:
+Line 110: `loss = F.cross_entropy(logits[train_idx], labels[train_idx])` ✓ Correct
+Line 120: `cross_entropy(logits[val_idx], labels[val_idx])` ✗ Bug - missing `F.` prefix
+Line 128: `test_loss = F.cross_entropy(logits[test_idx], labels[test_idx])` ✓ Correct
+The line 120 appears to be calculating validation loss but:
+1. It's missing the `F.` prefix
+2. The result isn't assigned to any variable (likely should be `val_loss`)
+
+## Summary
+In PyTorch/DGL context:
+- **Always use `F.cross_entropy`** when you've imported `torch.nn.functional as F`
+- Plain `cross_entropy` without a prefix will result in a `NameError` unless you've specifically imported it differently
+
+The correct usage is always with the module prefix: `F.cross_entropy(predictions, targets)`

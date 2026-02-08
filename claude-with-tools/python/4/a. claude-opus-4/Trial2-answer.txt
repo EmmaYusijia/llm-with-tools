@@ -1,0 +1,24 @@
+Now I understand the context. Looking at the `storeTxnAndSendToClient` method (lines 562-587):
+**Yes, you DO need to call `deepcopy(result)` before modifying `result[DATA]`.**
+
+Here's why:
+1. **The result object is shared**: 
+The `result` comes from `reply.result` (line 571), which is a reference to the reply object's result. 
+If you modify it directly, you're modifying the original reply object.
+
+2. **The code already does this correctly**: 
+Looking at lines 572-574, the code checks if the transaction type is `SCHEMA` or `ISSUER_KEY`, and if so, it creates a deep copy before modifying the `DATA` field:
+\n   ```python\n   if result[TXN_TYPE] in (SCHEMA, ISSUER_KEY):\n       result = deepcopy(result)\n       result[DATA] = jsonSerz.serialize(result[DATA], toBytes=False)\n   ```
+
+3. **The pattern is used elsewhere**: 
+The same pattern is followed in other methods:
+- `hashAttribTxn` (line 609) creates a deep copy before modifying the result
+- `storeTxnInGraph` (line 621) creates a deep copy before removing fields
+
+4. **Why it matters**: 
+After modifying `result[DATA]`, the code:
+- Stores the transaction in the ledger (line 576)
+- Sends the reply to the client (line 583)
+- Stores the transaction in the graph (line 586)
+Without the deep copy, all these operations would see the modified data, which might not be the intended behavior.
+The deep copy ensures that the original reply object remains unchanged while allowing you to create a modified version for specific purposes (like serialization before storing in the ledger).

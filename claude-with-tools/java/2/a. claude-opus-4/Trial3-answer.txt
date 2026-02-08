@@ -1,0 +1,37 @@
+Based on my analysis of the code, I can now explain the key differences between using `HashMap` vs `singletonMap` as a parameter to `messageParams`:
+## Key Differences:
+### 1. **Mutability**
+- **HashMap**: Creates a mutable map that can be modified after creation
+- **singletonMap**: Creates an immutable map with exactly one key-value pair that cannot be modified
+
+### 2. **Performance & Memory**
+- **HashMap**: Has overhead for maintaining a hash table structure, even for a single entry
+- **singletonMap**: Optimized for exactly one entry, minimal memory footprint
+
+### 3. **Usage in the codebase**
+In the test file (`UidFetchCommandTest.java:110`), we see:
+```java\nnew HashMap<>(Collections.singletonMap(String.valueOf(uid), (Message) createImapMessage(String.valueOf(uid))))\n```
+This creates a **mutable copy** of a singleton map. This pattern is used because:
+- The `messageParams` method expects a `HashMap<String, Message>` specifically (not just a `Map`)
+- `Collections.singletonMap` returns an immutable `Map`, not a `HashMap`
+- Wrapping it in `new HashMap<>()` creates a mutable HashMap copy
+
+In production code (`ImapFolder.java`), we see:
+```java\nHashMap<String, Message> messageMap = new HashMap<>();\nfor (Message message : messages) {\n    String uid = message.getUid();\n    messageMap.put(uid, message);\n}\n```
+This uses a regular HashMap because:
+- Multiple messages need to be added dynamically
+- The map needs to be mutable for the loop to work
+
+### 4. **When to use each**
+- **Use HashMap when**:
+    - You need to add/remove entries after creation
+    - The method signature specifically requires `HashMap` (not just `Map`)
+    - You're building the map incrementally
+    
+- **Use singletonMap when**:
+    - You have exactly one key-value pair
+    - You don't need to modify the map
+    - The method accepts `Map` interface (not specifically `HashMap`)
+    - You want better memory efficiency for single-entry maps
+
+In this codebase's context, the test wraps `singletonMap` in a `HashMap` constructor because the `messageParams` method signature requires a `HashMap` specifically, not just any `Map` implementation.

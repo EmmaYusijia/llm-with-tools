@@ -1,0 +1,29 @@
+Now I can explain the difference between using `HashMap` and `singletonMap` as a parameter to `messageParams`:
+
+## Key Differences between HashMap and singletonMap:
+### 1. **Mutability**
+- **HashMap**: Mutable - you can add, remove, or modify entries after creation
+- **singletonMap**: Immutable - contains exactly one key-value pair that cannot be changed
+
+### 2. **Performance and Memory**
+- **HashMap**: Has overhead for resizing, load factor management, and bucket allocation
+- **singletonMap**: Optimized for a single entry - minimal memory footprint and better performance
+
+### 3. **Usage Intent**
+- **HashMap**: Used when you might need multiple entries or need to modify the map
+- **singletonMap**: Used when you know you'll only ever have one entry
+
+### In the context of this code:
+Looking at the test file (line 110-111), the code uses:
+```java\nnew HashMap<>(Collections.singletonMap(String.valueOf(uid), \n    (Message) createImapMessage(String.valueOf(uid))))\n```
+This creates a **mutable HashMap** initialized with a single entry from `singletonMap`. 
+This pattern is used because:
+1. The `messageParams` method expects a `HashMap<String, Message>` specifically (see line 137 in UidFetchCommand.java)
+2. The code might need to handle multiple messages in production (see ImapFolder.java usage where `messageMap` could contain multiple UIDs)
+3. The test creates a new HashMap to ensure the map is mutable, even though it's initialized with just one entry
+
+### Alternative approaches:
+If the method signature allowed `Map<String, Message>` instead of `HashMap<String, Message>`, you could use:
+- `Collections.singletonMap(uid, message)` directly for single-message cases (more efficient)
+- `new HashMap<>()` and add entries for multiple messages
+The current approach in the test ensures compatibility with the expected `HashMap` type while still leveraging the convenience of `singletonMap` for initialization.

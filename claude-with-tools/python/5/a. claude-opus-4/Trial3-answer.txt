@@ -1,0 +1,17 @@
+Looking at this code, the check `if not build_directory` on line 600 **is necessary** for the following reasons:
+1. **Defensive programming**: 
+Even though `build_manager.setup_build()` should set the `BUILD_DIR` environment variable when successful, there's no guarantee that the environment variable will be set properly. 
+The check ensures that both conditions are met before proceeding.
+
+2. **build_directory is used immediately after**: 
+On line 604, `build_directory` is passed to the `Runner` constructor. 
+Without this check, if `build_directory` is `None` or empty, the code would fail with a less informative error when trying to use it.
+
+3. **Consistent with build_setup_result check**: 
+The code already checks `build_setup_result`, and checking `build_directory` provides an additional layer of validation that the build setup was truly successful and all required values are available.
+
+4. **Clear error messaging**: 
+By checking both conditions together, the code provides a clear error message \"Failed to setup build\" that covers both potential failure cases.
+The recent commit message \"Make build setup result checking more strict in corpus pruning\" (fb1bf92d) suggests that the developers intentionally want stricter validation in this area, which supports keeping this check.
+
+In summary, the `if not build_directory` check should be kept as it provides important validation before the variable is used and helps prevent potential runtime errors with better error messaging.
