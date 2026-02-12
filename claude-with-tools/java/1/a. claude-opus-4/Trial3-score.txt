@@ -1,5 +1,6 @@
 1a -2
 3a -3
+Final score: 4/9
 
 Tools used: 
 Bash {'command': 'find . -type f -name "*.java" -o -name "*.kt" | head -20', 'description': 'Find Java and Kotlin files to understand the project structure'}

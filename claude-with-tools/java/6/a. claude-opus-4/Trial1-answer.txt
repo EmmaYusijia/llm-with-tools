@@ -1,0 +1,23 @@
+Now I can see the key difference! Looking at line 225 and line 227, we can see how `Short` and `Integer` types are handled differently:
+For **Short** type (line 225):
+```java\ncase \"Short\":\n    return (short) currentNode.asDouble();\n```\n\nFor **Integer** type (line 227):\n```java\ncase \"Integer\":\n    return currentNode.asInt();\n```\n\nThe key difference is:
+1. **`currentNode.asDouble()`** for Short:
+- Returns a `double` value from the JSON node
+- The result is then cast to `short` using `(short)` cast
+- This approach allows for more precise handling of decimal values that might be present in the JSON
+
+2. **`currentNode.asInt()`** for Integer:
+- Returns an `int` value directly from the JSON node
+- No casting is needed since the return type matches the desired type
+
+**Why the difference?**
+The reason for using `asDouble()` for Short is likely because:
+- JSON doesn't have a native \"short\" type - it only has numbers
+- Using `asDouble()` first ensures that any decimal values in the JSON are properly handled before casting to `short`
+- Jackson's `asInt()` method might not handle all edge cases for values that should be shorts (e.g., very small decimal values that round to valid short values)
+- The `asDouble()` approach provides more consistent behavior across different numeric types
+This pattern is also used for `Float` (line 239):
+ ```java\ncase \"Float\":\n    return (float) currentNode.asDouble();\n```
+ 
+ In summary: `asDouble()` is used for smaller numeric types (Short, Float) to ensure proper value conversion, 
+ while `asInt()` is used directly for Integer types since Jackson has native support for that conversion.

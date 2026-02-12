@@ -1,0 +1,19 @@
+Based on my analysis of the codebase, here's what I found about the `roleInfoList` null check:
+## Analysis of `roleInfoList` Null Check
+Looking at the implementation and usage patterns:
+1. **In `NacosRoleServiceImpl.getRoles()`** (lines 159-167):
+- The method can return `null` if `getRolesFromDatabase()` returns `null`
+- When `roleInfoPage` is null, the method will return `null` (not an empty list)
+
+2. **Current usage patterns show inconsistent null checking**:
+- `NacosAuthManager.java` (lines 91, 127): Uses null check before iterating
+- `UserController.java` (line 121): Uses null check before iterating
+- `NacosRoleServiceImpl.java` itself (line 125): Uses `Collections.isEmpty()` without null check
+
+## Recommendation
+**Yes, you should keep the null check for `roleInfoList`** because:
+1. The `getRoles()` method can return `null` when the database query returns null
+2. Most existing code already includes null checks, showing this is an expected scenario
+3. Without the null check, you risk a `NullPointerException` when iterating over the list
+However, there's an inconsistency in the codebase at `/Users/emmayu/crqbench/projects/nacos/console/src/main/java/com/alibaba/nacos/console/security/nacos/roles/NacosRoleServiceImpl.java:125` where `Collections.isEmpty(roleInfoList)` is called without a null check, which could throw a `NullPointerException`.
+The safest approach is to always check for null before using `roleInfoList`, or alternatively, modify the `getRoles()` method to always return an empty list instead of null for a more consistent API.
