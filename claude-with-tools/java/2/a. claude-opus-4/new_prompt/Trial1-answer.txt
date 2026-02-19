@@ -1,0 +1,24 @@
+Now I can see the complete picture. Let me analyze the difference between using `HashMap` and `singletonMap` in this context.
+
+Looking at the code:
+- Line 110 in the test file: `new HashMap<>(Collections.singletonMap(String.valueOf(uid), (Message) createImapMessage(String.valueOf(uid))))`
+- Line 137 in the command file: The `messageParams` method accepts a `HashMap<String, Message>` parameter
+
+The key difference is:
+1. **`Collections.singletonMap()`** returns an **immutable** map with exactly one key-value pair. 
+You cannot add, remove, or modify entries in this map after creation.
+
+2. **`new HashMap<>(singletonMap)`** creates a **mutable** copy of the singleton map. 
+The resulting HashMap can be modified - you can add more entries, remove entries, or change values.
+
+In this specific code, the construction `new HashMap<>(Collections.singletonMap(...))` is creating a mutable HashMap initialized with a single entry. 
+This pattern is used when:
+- You want to start with one entry but may need to modify the map later
+- The API expects a mutable HashMap (as the `messageParams` method signature shows)
+- You need to ensure the map is not accidentally shared in an immutable state
+
+<answer>
+The code uses `new HashMap<>(Collections.singletonMap(...))` instead of just `singletonMap` because the `messageParams` method expects a mutable `HashMap<String, Message>` parameter. 
+`Collections.singletonMap()` returns an immutable map that cannot be modified, while `new HashMap<>(singletonMap)` creates a mutable copy that can be modified if needed. 
+This ensures the UidFetchCommand receives a mutable map as required by its API, even though in this test case only one entry is being added initially.
+</answer>

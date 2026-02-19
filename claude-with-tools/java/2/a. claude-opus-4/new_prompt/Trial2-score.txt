@@ -1,0 +1,5 @@
+2c -1
+Final score: 6/7
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/thunderbird-android/k9mail-library/src/test/java/com/fsck/k9/mail/store/imap/selectedstate/command/UidFetchCommandTest.java'}
