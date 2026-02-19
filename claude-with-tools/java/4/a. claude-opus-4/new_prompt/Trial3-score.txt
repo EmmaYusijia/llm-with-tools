@@ -1,0 +1,6 @@
+1a -1
+1c -2
+3b -1
+Final score: 5/9
+
+No tools used

@@ -1,5 +1,6 @@
 Based on my analysis of the code:
 **No, you don't need an explicit null check for `roleInfoList` in the `hasRoleWithUser` method at line 125.**
+
 Here's why:
 1. **`getRoles()` method never returns null**: 
 Looking at the implementation of `getRoles()` (lines 159-168), it can return:

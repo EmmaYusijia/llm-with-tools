@@ -1,3 +1,8 @@
+1a -1
+3a -1
+3b -1
+Final score: 6/9
+
 Note:
 Instead of looking at line 159-169, it checks `roleInfoList` in the `hasRoleWithUser` method at line 125:
 if (Collections.isEmpty(roleInfoList)), which doesn't have null check ('command': 'grep -r "roleInfoList" - happened to look at the correct lines in other 2 trials?)
@@ -6,7 +11,7 @@ However, it also looks at line 159-169:
 Looking at the implementation of `getRoles()` (lines 159-168), it can return:
 - The cached list from `roleInfoMap.get(username)` (which could be null) --> got 2a
 - The result of `roleInfoPage.getPageItems()` from the database 
-- null if both the cache lookup and database query fail --> got 2c off Hallucination
+- null if both the cache lookup and database query fail
 
 Tools used:
 Grep {'pattern': 'roleInfoList', 'paths': '["/Users/emmayu/crqbench/projects/nacos"]'}

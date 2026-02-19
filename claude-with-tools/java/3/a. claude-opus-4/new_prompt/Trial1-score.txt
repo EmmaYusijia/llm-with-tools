@@ -1,0 +1,5 @@
+2c -1
+Final score: 6/7
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/secor/src/main/java/com/pinterest/secor/common/LogFilePath.java'}

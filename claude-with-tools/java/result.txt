@@ -1,0 +1,14 @@
+java     
+old       
+1: 66.67% 
+2: 90.48%
+3: 71.43% (vs.80%)
+4: 51.85% (vs.83.33%)
+5: ask for file name and line number
+
+new
+1: 59.26% (vs.62.96%) T1-4/9 T2-7/9 T3-5/9 (tools listed in T3)
+2: 85.71% T1-3(6/7, tools listed)
+3: 85.71% T1-3(6/7, tools listed)
+4: 70.37% (vs.83.33%) T1-8/9 T2-6/9 T3-5/9 (tools never listed)
+5: 76.19% (vs.76.67%) T1-10/14 T2-11/14 T3-11/14 (tools listed in T2)

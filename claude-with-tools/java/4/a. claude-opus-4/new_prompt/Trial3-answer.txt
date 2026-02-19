@@ -1,0 +1,17 @@
+Looking at this code, I need to analyze the logic flow to determine if the null check for `roleInfoList` is necessary.
+Let me examine the code structure:
+```java\npublic List<RoleInfo> getRoles(String username) {\n    List<RoleInfo> roleInfoList = roleInfoMap.get(username);\n    if (!authConfigs.isCachingEnabled() || roleInfoList == null) {\n        Page<RoleInfo> roleInfoPage = getRolesFromDatabase(username, DEFAULT_PAGE_NO, Integer.MAX_VALUE);\n        if (roleInfoPage != null) {\n            roleInfoList = roleInfoPage.getPageItems();\n        }\n    }\n    return roleInfoList;\n}\n```
+
+The condition `if (!authConfigs.isCachingEnabled() || roleInfoList == null)` will enter the if-block in two scenarios:
+1. When caching is disabled (`!authConfigs.isCachingEnabled()` is true)
+2. When `roleInfoList` is null (no cached data for this username)
+
+In scenario 1, if caching is disabled but `roleInfoList` is not null (contains cached data), the code will still fetch from the database and potentially overwrite the cached value. 
+This seems intentional - when caching is disabled, always fetch fresh data.
+
+In scenario 2, if `roleInfoList` is null, we need to fetch from the database.
+
+<answer>
+Yes, you need the null check for `roleInfoList`. Without it, the method would return null when caching is enabled but no data exists in the cache for the given username. 
+The null check ensures that when cached data is missing, the system falls back to fetching from the database, providing a proper result rather than returning null.
+</answer>
