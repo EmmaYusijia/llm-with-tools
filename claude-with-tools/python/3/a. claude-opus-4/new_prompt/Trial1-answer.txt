@@ -1,0 +1,7 @@
+Looking at this code, I can see it's decoding the Host header from bytes to string using ASCII encoding when necessary for URL reconstruction.
+
+<answer>
+No, ASCII is the correct encoding choice here, not UTF-8. The HTTP/1.1 specification (RFC 7230) requires that HTTP headers, including the Host header, contain only ASCII characters. 
+For internationalized domain names (IDNs), they must be encoded using Punycode (ASCII-compatible encoding) before being sent in the Host header. 
+Using UTF-8 decoding would incorrectly accept non-conforming requests and could mask protocol violations.
+</answer>

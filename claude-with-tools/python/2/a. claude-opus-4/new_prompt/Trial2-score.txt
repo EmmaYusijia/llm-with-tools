@@ -1,0 +1,6 @@
+2c -1
+Final score: 6/7
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/taurus/bzt/modules/aggregator.py', 'limit': 200}
+Read {'file_path': '/Users/emmayu/crqbench/projects/taurus/bzt/modules/aggregator.py', 'offset': 200, 'limit': 50}

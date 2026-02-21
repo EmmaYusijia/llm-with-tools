@@ -1,0 +1,6 @@
+1a -1
+2b -1
+Final score: 3/5
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/indy-node/indy_common/types.py'}

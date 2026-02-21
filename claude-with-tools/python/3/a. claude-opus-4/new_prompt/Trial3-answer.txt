@@ -1,0 +1,9 @@
+Perfect! I found the `get_full_url` method in the `MockRequest` class in `/Users/emmayu/crqbench/projects/requests/requests/cookies.py:52`.
+Looking at the code, it's handling a case where the Host header might be a bytes object that needs to be decoded to a string for URL reconstruction. 
+The question asks whether UTF-8 should be used instead of ASCII for decoding.
+
+<answer>
+No, ASCII is the correct encoding to use here. Host headers in HTTP must contain only ASCII characters according to HTTP specifications (RFC 7230). 
+International domain names must be encoded using Punycode (which produces ASCII-compatible encoding) before being used in HTTP headers. 
+Using UTF-8 instead of ASCII could mask protocol violations where non-ASCII characters are incorrectly present in the Host header, potentially leading to security issues or unexpected behavior.
+</answer>

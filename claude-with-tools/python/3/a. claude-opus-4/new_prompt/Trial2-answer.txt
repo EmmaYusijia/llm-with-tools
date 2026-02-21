@@ -1,0 +1,9 @@
+Looking at this code from the requests library's cookies module, I can see it's part of the `MockRequest` class's `get_full_url()` method, 
+which handles reconstruction of URLs when a custom Host header is provided.
+
+<answer>
+No, ASCII should be used as the default encoding, not UTF-8. According to HTTP standards (RFC 7230), the Host header must contain only ASCII characters. 
+Hostnames must be either IP addresses or domain names conforming to DNS syntax (ASCII letters, digits, and hyphens). 
+International Domain Names (IDNs) must be encoded using Punycode, which is ASCII-compatible. 
+Using ASCII encoding enforces proper HTTP compliance and will raise an exception if invalid non-ASCII characters are incorrectly included in the Host header, which is the appropriate behavior.
+</answer>

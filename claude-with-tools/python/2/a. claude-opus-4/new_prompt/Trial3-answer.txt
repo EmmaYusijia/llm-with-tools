@@ -1,0 +1,22 @@
+Looking at this code, I can see this is a performance metrics aggregation system that tracks response times, latencies, and connection times. 
+The `_compact_times()` method is being called at the start of `recalculate()`.
+
+To answer your question about whether to call `_compact_times()` on every KPIset or only cumulative ones:
+<answer>
+You should call `_compact_times()` only on cumulative KPIsets. Regular/short-lived KPIsets likely don't accumulate enough data to warrant the overhead of compaction. 
+Cumulative KPIsets that continuously aggregate data over time need periodic compaction to prevent unbounded memory growth and maintain calculation performance. 
+Consider adding a check like `if self.is_cumulative or len(self[self.RESP_TIMES]) > threshold:` before calling `_compact_times()`.
+</answer>
+
+The reasoning is:
+1. **Memory efficiency**: Cumulative KPIsets accumulate data indefinitely and need compaction to prevent memory exhaustion
+
+2. **Performance**: Compacting small datasets adds unnecessary overhead
+
+3. **Data characteristics**: Short-term KPIsets typically have bounded data that doesn't require compaction
+
+You might want to make this decision based on:
+- The size of the response times list
+- Whether the KPIset is marked as cumulative
+- How long the KPIset has been collecting data
+- A configurable threshold for when compaction becomes beneficial

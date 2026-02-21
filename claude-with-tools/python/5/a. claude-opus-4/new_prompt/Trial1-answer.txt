@@ -1,0 +1,6 @@
+<answer>
+Yes, the check for `if not build_directory` is necessary and should be kept. 
+While `build_manager.setup_build()` should set the BUILD_DIR environment variable when it succeeds (all build types call `_setup_application_path()` which sets BUILD_DIR), 
+this defensive check provides important protection against edge cases such as race conditions, partial setup failures, or environment variable corruption. 
+Since corpus pruning is a critical operation that requires a valid build directory, the minimal cost of this extra validation is well worth the added reliability it provides.
+</answer>

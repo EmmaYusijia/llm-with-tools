@@ -1,0 +1,20 @@
+While `build_manager.setup_build()` should set the BUILD_DIR environment variable when it succeeds (through the `_setup_application_path()` method), 
+there are several reasons why the explicit check is valuable:
+1. **Different build types**: The code handles multiple build types (custom binary, system binary, regular build, fuchsia build, etc.), and each has slightly different setup paths. 
+While they all should set BUILD_DIR, verifying this ensures consistency.
+
+2. **Fail-fast principle**: Without this check, the code would fail later at line 604 with `Runner(build_directory, context)` with a potentially confusing error. 
+The explicit check provides a clear error message: \"Failed to setup build.\"
+
+3. **Defensive against edge cases**: There could be scenarios where `setup_build()` returns a truthy value but BUILD_DIR isn't properly set due to:
+   - Errors within `_setup_application_path()` that don't propagate properly
+   - Environmental issues or race conditions
+   - Future code changes that might break this assumption
+   
+4. **Low cost, high value**: The check is extremely cheap (just reading an environment variable) but prevents potential runtime errors and aids debugging.
+
+<answer>
+Yes, the check for `if not build_directory` is necessary. While `build_manager.setup_build()` should set BUILD_DIR when successful, the explicit check serves as important defensive programming. 
+It ensures that both the build setup succeeded AND the expected BUILD_DIR environment variable was actually set, preventing cryptic failures later when the Runner tries to use an undefined build directory. 
+The check has negligible performance cost but provides clear error messaging and protection against edge cases across different build types.
+</answer>

@@ -1,0 +1,8 @@
+1a -1
+Final score: 3/4
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/requests/requests/models.py'}
+Bash {'command': 'grep -n "def get_full_url" /Users/emmayu/crqbench/projects/requests/requests/models.py', 'description': 'Search for get_full_url method in models.py'}
+Bash {'command': 'grep -rn "def get_full_url" /Users/emmayu/crqbench/projects/requests/', 'description': 'Search for get_full_url method in all files'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/requests/requests/cookies.py', 'offset': 40, 'limit': 40}

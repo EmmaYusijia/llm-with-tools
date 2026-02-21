@@ -1,0 +1,19 @@
+Based on my analysis of the code, I can see that `_compact_times()` is a method that compacts the response time distribution when it exceeds a maximum length (1000 entries by default). 
+It merges nearby response time values to prevent memory issues.
+
+Looking at the implementation and usage patterns:
+1. **What `_compact_times()` does**: 
+It reduces the number of response time entries by merging adjacent values when the distribution exceeds `rt_dist_maxlen` (1000).
+
+2. **When it's needed**: 
+Both individual KPIsets (collecting samples directly) and cumulative KPIsets (merged from others) can accumulate many response time entries over time.
+
+3. **Safety**: 
+The method checks if compaction is needed (`redundant_cnt > 0`) and only performs work when necessary, making it safe to call on any KPISet.
+
+<answer>
+You should call `_compact_times()` on every KPIset, both individual and cumulative. The method is designed to be safe and efficient 
+- it only performs compaction when the response time distribution exceeds the maximum length threshold. 
+Since both types of KPIsets can accumulate many response time entries (individual ones from samples, cumulative ones from merging), 
+and the method includes a guard condition to only compact when needed, it's appropriate to call it unconditionally in the `recalculate()` method as currently implemented.
+</answer>

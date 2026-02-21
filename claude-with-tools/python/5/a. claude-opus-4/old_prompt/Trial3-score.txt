@@ -1,0 +1,5 @@
+1b -2 Hallucination
+3a -1
+3b -1
+3c -1
+Final score: 2/7

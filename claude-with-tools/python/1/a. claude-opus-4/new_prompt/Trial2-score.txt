@@ -1,0 +1,5 @@
+No points deducted
+Final score: 4/4
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/dgl/examples/pytorch/rgcn/entity_classify.py', 'limit': 200}

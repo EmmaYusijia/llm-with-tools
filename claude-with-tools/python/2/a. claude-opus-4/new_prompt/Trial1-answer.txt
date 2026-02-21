@@ -1,0 +1,18 @@
+Looking at the code, I can see that `_compact_times()` is a method that limits the number of response time entries stored in memory to prevent unbounded growth. 
+It consolidates nearby response time values when the count exceeds `rt_dist_maxlen` (default 1000).
+
+Currently, `_compact_times()` is called unconditionally in the `recalculate()` method for all KPISet instances. 
+The key considerations are:
+1. **Current KPIsets**: 
+These represent data for a single time interval and typically have fewer unique response times
+2. **Cumulative KPIsets**: 
+These accumulate data over time and are more likely to exceed the threshold
+
+The method has built-in efficiency - it only performs consolidation when `len(times) > self.rt_dist_maxlen`, so calling it on KPIsets with few entries is essentially a no-op (just a length check).
+
+<answer>
+You should keep calling `_compact_times()` on every KPIset as it currently does. 
+The method already has an efficient guard clause that only triggers consolidation when needed (when entries exceed rt_dist_maxlen). 
+Since cumulative KPIsets are more likely to need compaction due to accumulating data over time, but current KPIsets could also theoretically exceed the threshold in high-volume scenarios, 
+the current approach of calling it universally is the safest and most maintainable solution.
+</answer>

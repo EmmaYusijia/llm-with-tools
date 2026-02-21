@@ -1,0 +1,29 @@
+3a -1
+3b -1
+3c -1
+Final score: 4/7
+
+Tools used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'offset': 1, 'limit': 50}
+Bash {'command': 'grep -n "def do_corpus_pruning" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'description': 'Find line number where do_corpus_pruning function is defined'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'offset': 587, 'limit': 30}
+Bash {'command': 'find /Users/emmayu/crqbench/projects/clusterfuzz -name "*.py" -type f | xargs grep -l "def setup_build" | grep build_manager', 'description': 'Find build_manager files containing setup_build function'}
+Bash {'command': 'grep -n "def setup_build" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find line number of setup_build function'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 1397, 'limit': 50}
+Bash {'command': 'grep -n "def setup_regular_build" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find line number of setup_regular_build function'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 1229, 'limit': 50}
+Bash {'command': 'grep -n "class RegularBuild" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find line number of RegularBuild class'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 685, 'limit': 80}
+Bash {'command': 'grep -n "class Build" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py | grep -v "class RegularBuild\\|class FuchsiaBuild"', 'description': 'Find Build parent class definition'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 384, 'limit': 100}
+Bash {'command': 'grep -n "_setup_application_path" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find _setup_application_path method definition'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 627, 'limit': 60}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'offset': 595, 'limit': 10}
+Bash {'command': 'grep -n "setup_build(" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/*.py | head -20', 'description': 'Find usage of setup_build in task files'}
+Bash {'command': 'grep -n "setup_build" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'description': 'Find setup_build usage in corpus_pruning_task.py'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 1397, 'limit': 35}
+Bash {'command': 'grep -A 20 "def setup_custom_binary" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find setup_custom_binary function implementation'}
+Bash {'command': 'grep -A 20 "def setup_system_binary" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find setup_system_binary function implementation'}
+Bash {'command': 'grep -n "class SystemBuild" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'description': 'Find SystemBuild class definition'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 986, 'limit': 20}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/build_management/build_manager.py', 'offset': 640, 'limit': 5}
