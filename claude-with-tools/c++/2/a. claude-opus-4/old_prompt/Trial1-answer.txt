@@ -1,0 +1,14 @@
+Common error codes that can occur in TCP socket operations include:
+- **ETIMEDOUT** - Connection timed out (found in HashStore.cpp)
+- **EHOSTUNREACH** - No route to host
+- **ENETUNREACH** - Network is unreachable
+- **EADDRINUSE** - Address already in use
+- **EACCES/EPERM** - Permission denied
+- **EMFILE/ENFILE** - Too many open files
+- **ENOBUFS/ENOMEM** - Insufficient buffer space/memory
+
+The code in Utils.cpp only provides special retry logic for `ECONNREFUSED` and `ECONNRESET` because these indicate temporary conditions where the server might not be ready yet. 
+Other errors are not retried and will be thrown immediately to the caller.
+
+So to answer your question: **Yes, error_code can be many values other than ECONNREFUSED or ECONNRESET**. 
+The code will handle any errno value that the underlying system calls produce, but only those two get special retry treatment in the connection loop.

@@ -1,0 +1,28 @@
+Yes, there is an important difference between using `.at()` vs `[]` operator for accessing map elements in C++:
+## Key Differences:
+### 1. **Behavior when key doesn't exist:**
+- **`.at(key)`**: Throws `std::out_of_range` exception if the key is not found
+- **`[key]`**: Creates a new element with default-constructed value if the key doesn't exist
+
+### 2. **Const-correctness:**
+- **`.at(key)`**: Works with both const and non-const maps
+- **`[key]`**: Only works with non-const maps (since it can modify the map)
+
+## In your specific case:
+Looking at the code in `/Users/emmayu/crqbench/projects/mantid/MantidQt/CustomInterfaces/src/Reflectometry/QtReflEventView.cpp:84`:
+```cpp\nstd::string QtReflEventView::getTimeSlicingType() const {\n    return m_sliceTypeStrMap.at(m_sliceType);\n}\n```
+Using `.at()` is the correct choice here because:
+1. **The method is const**: Since `getTimeSlicingType()` is marked `const`, using `[]` would not compile because `[]` is not const-qualified
+2. **Safety**: If somehow `m_sliceType` contains an invalid value not in the map, `.at()` will throw an exception rather than silently creating a new entry
+3. **Intent**: You're reading from the map, not intending to modify it
+
+## Example of the difference:
+```cpp\nstd::map<int, std::string> myMap = {{1, \"one\"}, {2, \"two\"}};
+// Using at() with non-existent key
+try {\n    auto value = myMap.at(3);  // Throws std::out_of_range\n} catch (const std::out_of_range& e) {\n    // Handle error\n}
+
+// Using [] with non-existent key\nauto value = myMap[3];  // Creates myMap[3] = \"\" (default string)
+// Now myMap has 3 elements: {1: \"one\", 2: \"two\", 3: \"\"}\n```
+
+In your code, since `m_sliceTypeStrMap` is initialized with all possible `SliceType` values and `m_sliceType` is always set to one of these values in `toggleSlicingOptions()`, 
+the `.at()` call should never throw in normal operation, making it a safe and appropriate choice.

@@ -1,0 +1,55 @@
+[thinking]
+Now I can see the `connect()` function in Utils.cpp. Looking at the code, I can see that it handles various error codes beyond just `ECONNREFUSED` and `ECONNRESET`. 
+Let me analyze what other error codes can occur:
+1. In the `handleConnectException` function (lines 135-176), it specifically checks for:
+   - `ECONNREFUSED` (line 145) - when the server is not yet listening
+   - `ECONNRESET` (line 149) - when the server's listen backlog is exhausted
+   
+2. But the function can also handle other error codes. Looking at the connect function:
+   - Line 248: It checks if `errno != EINPROGRESS` after a non-blocking connect attempt
+   - Line 267: It can throw a system_error for any poll() failure
+   - Line 282: It can throw a system_error for any error returned by getsockopt() when checking the socket error state
+   
+3. The code uses generic error handling through std::system_error, which means it can propagate ANY system error that occurs during:
+   - socket() creation (line 234)
+   - fcntl() operations (lines 243, 287-288)
+   - connect() (line 245)
+   - poll() (line 265)
+   - getsockopt() (line 275)
+   
+Let me search for other files that might show examples of error handling or define specific error codes.
+
+The code shows that any errno value can be thrown as a std::system_error. 
+Let me check if there are any test files that might show examples of other error codes being handled or expected.
+
+Yes, `error_code` can definitely be something other than `ECONNREFUSED` or `ECONNRESET`. 
+Looking at the PyTorch TCP utility code, I can see several things:
+## Explicitly Handled Error Codes:
+1. **In `connect()` function** (Utils.cpp:145-151):
+   - `ECONNREFUSED` - Server not listening (gets retry behavior)
+   - `ECONNRESET` - Server's listen backlog exhausted (gets retry behavior)
+   - `EINPROGRESS` - Expected for non-blocking connect
+   
+2. **In `SYSCHECK` macro** (Utils.hpp:351-354):
+   - `EINTR` - Interrupted system call (retries immediately)
+   - `EAGAIN`/`EWOULDBLOCK` - Resource temporarily unavailable (throws \"Socket Timeout\")
+## Other Possible Error Codes:
+The code uses `std::system_error` to propagate any errno value that occurs during:
+- **`socket()` creation**: `EMFILE`, `ENFILE`, `EACCES`, `ENOBUFS`, `ENOMEM`, etc.
+- **`connect()` call**: `EACCES`, `EADDRINUSE`, `EADDRNOTAVAIL`, `EALREADY`, `EBADF`, `EFAULT`, `EISCONN`, `ENETUNREACH`, `ENOTSOCK`, `ETIMEDOUT`, etc.
+- **`poll()` call**: `EBADF`, `EFAULT`, `EINVAL`, `ENOMEM`
+- **`getsockopt()` call**: Various socket-level errors
+- **`fcntl()` operations**: File control errors
+
+## Key Difference:
+Only `ECONNREFUSED` and `ECONNRESET` get special retry logic when `wait=true` is passed to `connect()`. 
+All other errors are immediately thrown as exceptions without retry attempts.
+
+These specific error codes aren't explicitly mentioned in the code, but they can still occur and would be thrown as std::system_error. 
+The key point is that the code handles ANY errno value that the system calls might return.
+
+[result]
+So to summarize: while `ECONNREFUSED` and `ECONNRESET` are the only error codes that get special retry handling in the `tcputils::connect()` function, 
+many other error codes can occur and will be propagated as exceptions. 
+Common networking error codes you might encounter include `ETIMEDOUT`, `ENETUNREACH`, `EADDRINUSE`, `EHOSTUNREACH`, 
+and others depending on the specific network conditions and system state.

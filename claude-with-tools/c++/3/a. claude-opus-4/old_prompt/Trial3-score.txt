@@ -1,0 +1,5 @@
+2c -2 Hallucination
+3a -1
+Final score: 4/7
+
+No tools used

@@ -1,0 +1,27 @@
+Yes, `error_code` can definitely be something other than `ECONNREFUSED` or `ECONNRESET`. 
+Looking at the PyTorch TCP utilities code:
+**Specifically handled error codes:**
+- **`ECONNREFUSED`** (line 145 in Utils.cpp) - Server is not listening on the port
+- **`ECONNRESET`** (line 149) - Server's listen backlog is exhausted
+
+**Other possible error codes from the codebase:**
+- **`EINPROGRESS`** (line 247) - Non-blocking connect operation is in progress
+- **`EINTR`** (line 351 in Utils.hpp, line 334 in Utils.cpp) - System call was interrupted
+- **`EAGAIN`/`EWOULDBLOCK`** (line 353 in Utils.hpp) - Non-blocking operation would block
+- **`ECONNABORTED`** (line 340 in Utils.cpp) - Connection aborted
+- **Any other system errno** 
+- The code throws `std::system_error(errno, std::system_category())` for any error returned by system calls
+
+The `handleConnectException` function doesn't restrict what error codes can be passed to it. 
+It just has special handling for `ECONNREFUSED` and `ECONNRESET` because these are recoverable errors where retrying might succeed. 
+For these two errors, it sets flags (`anyRefused` and `anyReset`) and potentially retries the connection.
+
+Other common network error codes that could occur include:
+- `ETIMEDOUT` - Connection timed out
+- `EHOSTUNREACH` - Host is unreachable
+- `ENETUNREACH` - Network is unreachable  
+- `EADDRINUSE` - Address already in use
+- `EACCES` - Permission denied
+- `ENOBUFS` - No buffer space available
+
+All of these would be handled by the generic error path without the special retry logic.

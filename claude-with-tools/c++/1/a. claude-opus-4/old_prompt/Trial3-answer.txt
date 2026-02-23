@@ -1,0 +1,32 @@
+Yes, there are several important differences between using `operator+` and `fmt::format` for string concatenation:
+## Current approach (operator+):
+```cpp\nAString(\"[\" + cManualBindings::GetLuaPlugin(tolua_S)->GetName() + \"]: \") + AString(str, len)\n```
+
+## Alternative with fmt::format:\n```cpp\nfmt::format(\"[{}]: {}\", cManualBindings::GetLuaPlugin(tolua_S)->GetName(), AString(str, len))\n```
+
+## Key Differences:
+### 1. **Performance**
+- **operator+**: Creates multiple temporary string objects during concatenation. Each `+` operation may allocate new memory and copy data.
+- **fmt::format**: More efficient - calculates the final string size upfront and allocates memory once, then writes all parts directly.
+
+### 2. **Memory Allocations**
+- **operator+**: In your example, creates at least 3 temporary strings:
+  1. `\"[\" + GetName()` 
+  2. Result of #1 + \"]: \"
+  3. Final concatenation with `AString(str, len)`
+- **fmt::format**: Single allocation for the final result
+  
+### 3. **Type Safety & Flexibility**
+- **operator+**: All operands must be strings or convertible to strings
+- **fmt::format**: Automatically handles various types and provides format specifiers
+
+### 4. **Readability**
+- **operator+**: Can become verbose with many concatenations
+- **fmt::format**: Clear separation between format pattern and values
+
+### 5. **Compile-time Checking**
+- **operator+**: Runtime errors if types don't support string conversion
+- **fmt::format**: Modern versions support compile-time format string checking
+
+For your specific use case in Cuberite's logging, `fmt::format` would be more efficient, especially if this logging happens frequently. 
+The performance difference becomes more significant with more string parts or in hot code paths.

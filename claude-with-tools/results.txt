@@ -1,0 +1,46 @@
+python
+old
+1: 100%
+2: 85.71%
+3: 66.67%
+4: 40%
+5: 38.10%
+
+new
+1: 100%
+2: 90.48%
+3: 75%
+4: 73.33% (Claude: 100%)
+5: 57.14% 
+
+
+java     
+old       
+1: 66.67% 
+2: 90.48%
+3: 71.43% (Claude: 80%)
+4: 51.85% (Claude: 83.33%)
+5: ask for file name and line number
+
+new
+1: 59.26% (Claude: 62.96%) T1-4/9 T2-7/9 T3-5/9 (tools listed in T3)
+2: 85.71% T1-3(6/7, tools listed)
+3: 85.71% T1-3(6/7, tools listed)
+4: 70.37% (Claude: 83.33%) T1-8/9 T2-6/9 T3-5/9 (tools never listed)
+5: 76.19% (Claude: 76.67%) T1-10/14 T2-11/14 T3-11/14 (tools listed in T2)
+
+
+c++
+old
+1: 25%
+2: 52.38% (Claude: 72.22%)
+3: 66.67% (Claude: 74.07%)
+4:
+5:
+
+new
+1: 25%
+2: 76.19%
+3: 71.43%
+4:
+5: 

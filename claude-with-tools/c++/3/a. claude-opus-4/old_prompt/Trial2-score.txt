@@ -1,0 +1,7 @@
+2c -2 Hallucination
+Final score: 5/7
+
+Tools used:
+Bash {'command': 'find /Users/emmayu/crqbench/projects/mantid -type f \\( -name "*.cpp" -o -name "*.h" \\) | xargs grep -l "m_sliceTypeStrMap" | head -20', 'description': 'Search for files containing m_sliceTypeStrMap'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/Reflectometry/QtReflEventView.h'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/MantidQt/CustomInterfaces/src/Reflectometry/QtReflEventView.cpp'}
