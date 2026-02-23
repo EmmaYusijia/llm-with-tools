@@ -1,0 +1,6 @@
+3b -2 Hallucination
+4c -2 Hallucination
+Final score: 4/8
+
+Tool used:
+Read {'file_path': '/Users/emmayu/crqbench/projects/terminal/q.txt'}
