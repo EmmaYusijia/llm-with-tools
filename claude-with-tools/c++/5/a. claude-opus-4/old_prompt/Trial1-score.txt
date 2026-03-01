@@ -1,0 +1,11 @@
+1b -2 Hallucination
+2a -1
+Final score: 3/6
+
+Tools used:
+Bash {'command': 'find . -type f -name "*.h" -o -name "*.cpp" | xargs grep -l "SQWLoadingPresenter" | head -20', 'description': 'Find files containing SQWLoadingPresenter'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/MDEWLoadingPresenter.h'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/MDLoadingPresenter.h'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/src/SQWLoadingPresenter.cpp'}
+Edit {'replace_all': False, 'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h', 'old_string': '      virtual void extractMetadata(Mantid::API::IMDEventWorkspace_sptr eventWs);\n      virtual void executeLoadMetadata();\n      virtual ~SQWLoadingPresenter();\n      virtual bool canReadFile() const;', 'new_string': '      virtual void extractMetadata(Mantid::API::IMDEventWorkspace_sptr eventWs);\n      virtual void executeLoadMetadata();\n      virtual bool canReadFile() const;'}

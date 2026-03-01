@@ -1,6 +1,7 @@
 3a -1
 3b -1
-Final score: 5/7
+3c -1
+Final score: 4/7
 
 Tools used:
 Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'offset': 1, 'limit': 50}

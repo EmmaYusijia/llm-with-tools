@@ -1,0 +1,16 @@
+**Option 1: Remove both declaration and definition**
+- Remove line 48 from the header file: `virtual ~SQWLoadingPresenter();`
+- Remove line 169 from the cpp file: `SQWLoadingPresenter::~SQWLoadingPresenter() {}`
+
+**Option 2: Use `= default` in the header** (C++11 and later)
+- Change line 48 in the header to: `virtual ~SQWLoadingPresenter() = default;`
+- Remove line 169 from the cpp file
+
+I recommend **Option 1** (complete removal) because:
+- The class is exported with `DLLExport`, but since the destructor does nothing special and the base class already provides the virtual destructor behavior, 
+the compiler-generated destructor will work fine
+- It reduces code clutter
+- The compiler-generated destructor will be just as efficient
+
+The only reason to keep an explicit destructor would be if you plan to add cleanup code in the future 
+or if there are specific DLL export requirements in your build system that require explicit destructors for exported classes.

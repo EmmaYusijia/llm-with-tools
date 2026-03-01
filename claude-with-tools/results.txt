@@ -31,16 +31,20 @@ new
 
 
 c++
-old
+old 
 1: 25%
 2: 52.38% (Claude: 72.22%)
 3: 66.67% (Claude: 74.07%)
 4: 66.67%
-5:
+5: 38.89% (Claude: 66.67%)
 
 new
 1: 25%
 2: 76.19%
 3: 71.43%
 4: 66.67%
-5: 
+5: 33.33% 
+
+Note:
+c++ 5 old_prompt trial1: edit failed
+"Claude requested permissions to write to /Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h, but you haven't granted it yet."

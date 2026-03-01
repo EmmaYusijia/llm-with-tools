@@ -7,9 +7,16 @@ Note: Before I was in the clusterfuzz directory and it said it found if not buil
 2. **engine_common.py:285** - In the `find_fuzzer_path()` function
 Then I changed directory to /clusterfuzz/src/python/bot/tasks and it located the right file corpus_pruning_task.py.
 
+Tools used:
+Bash {'command': 'grep -n "if not build_directory" *.py', 'description': "Search for 'if not build_directory' condition in Python files"}
+Bash {'command': 'ls *.py | head -20', 'description': 'List Python files in current directory'}
+Bash {'command': 'ls *.py', 'description': 'List Python files in current directory'}
+Bash {'command': 'find . -name "*.py" -type f | grep -v __pycache__', 'description': 'Find all Python files in current directory'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py'}
+Bash {'command': 'grep -n "if not build_directory" /Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'description': "Search for 'if not build_directory' in corpus_pruning_task.py"}
+Read {'file_path': '/Users/emmayu/crqbench/projects/clusterfuzz/src/python/bot/tasks/corpus_pruning_task.py', 'offset': 595, 'limit': 10}
+
 Bash failed because "This command requires approval". Command used: grep -n \"if not build_directory\" *.py
 ls *.py | head -20     This Bash command contains multiple operations. The following part requires approval: ls *.py
 ls *.py                This command requires approval
 find . -name \"*.py\   worked
-
-

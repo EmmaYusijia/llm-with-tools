@@ -1,0 +1,17 @@
+1a -1
+2a -1
+2b -2 Hallucination
+Final score: 2/6
+
+Tools used:
+Bash {'command': 'find . -type f -name "*.h" -o -name "*.cpp" | xargs grep -l "SQWLoadingPresenter" | head -20', 'description': 'Search for files containing SQWLoadingPresenter'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h'}
+Bash {'command': 'grep -n "~SQWLoadingPresenter" /Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/src/SQWLoadingPresenter.cpp', 'description': 'Find the destructor implementation'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/MDEWLoadingPresenter.h'}
+Bash {'command': 'find . -type f \\( -name "*.h" -o -name "*.cpp" \\) | xargs grep -n ": public SQWLoadingPresenter\\|: SQWLoadingPresenter"', 'description': 'Search for classes deriving from SQWLoadingPresenter'}
+Bash {'command': 'grep -n "new SQWLoadingPresenter" /Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/test/SQWLoadingPresenterTest.h /Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/src/SQWLoadingPresenter.cpp', 'description': 'Search for instantiations of SQWLoadingPresenter'}
+Bash {'command': 'find . -type f \\( -name "*.h" -o -name "*.cpp" \\) | xargs grep -B2 -A2 "SQWLoadingPresenter" | grep -E "(new|std::make_unique|std::make_shared|unique_ptr|shared_ptr)" | head -20', 'description': 'Search for how SQWLoadingPresenter is instantiated'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/test/SQWLoadingPresenterTest.h', 'limit': 100}
+Bash {'command': 'find . -type f \\( -name "*.h" -o -name "*.cpp" \\) | xargs grep -E "(MDLoadingPresenter|MDEWLoadingPresenter)\\s*\\*.*=.*SQWLoadingPresenter" | head -10', 'description': 'Search for polymorphic usage through base class pointers'}
+Bash {'command': 'find . -type f \\( -name "*.h" -o -name "*.cpp" \\) | xargs grep -B5 -A5 "SQWLoadingPresenter" | grep -E "(factory|Factory|registry|Registry|create|Create)" | head -20', 'description': 'Search for factory patterns using SQWLoadingPresenter'}
+Bash {'command': 'find . -name "MDEWLoadingPresenter.cpp" | xargs grep -A10 "~MDEWLoadingPresenter"', 'description': 'Find the MDEWLoadingPresenter destructor implementation'}

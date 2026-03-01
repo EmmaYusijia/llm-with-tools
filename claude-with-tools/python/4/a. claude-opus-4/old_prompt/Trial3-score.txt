@@ -2,3 +2,9 @@
 2a -1
 2b -1
 Final Score: 2/5
+
+Tools used:
+Bash {'command': 'grep -r "result\\[DATA\\]" . --include="*.py" -B 2 -A 2 | head -100', 'description': 'Search for result[DATA] usage in Python files'}
+Bash {'command': 'grep -r "deepcopy(result)" . --include="*.py" -B 5 -A 5', 'description': 'Search for deepcopy(result) usage in Python files'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/indy-node/sovrin_node/server/node.py', 'offset': 800, 'limit': 100}
+Read {'file_path': '/Users/emmayu/crqbench/projects/indy-node/sovrin_node/server/node.py', 'offset': 400, 'limit': 300}

@@ -6,3 +6,9 @@ Note: At the end it mentioned:
 "The deep copy ensures that the original reply object remains unchanged while allowing you to create a modified 
 version for specific purposes (like serialization before storing in the ledger)."
 It touched on serialization a little bit but ended there.
+
+Tools used:
+Bash {'command': 'find . -type f -name "*.py" -exec grep -l "result\\[DATA\\]" {} \\; | head -20', 'description': 'Find Python files that reference result[DATA]'}
+Bash {'command': 'grep -r "result\\[DATA\\]" --include="*.py" . | head -20', 'description': 'Search for result[DATA] usage in Python files'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/indy-node/sovrin_node/server/node.py'}
+Bash {'command': 'grep -B5 -A5 "deepcopy(result)" /Users/emmayu/crqbench/projects/indy-node/sovrin_node/server/node.py', 'description': 'Search for deepcopy usage with context'}
