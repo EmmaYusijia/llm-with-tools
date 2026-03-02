@@ -1,0 +1,10 @@
+﻿model name,trial,rubric items deducted
+Claude Opus 4,1,
+Claude Opus 4,2,
+Claude Opus 4,3,
+w/o code seg w/ tools,1,
+w/o code seg w/ tools,2,
+w/o code seg w/ tools,3,
+w/ code seg & tools,1,
+w/ code seg & tools,2,
+w/ code seg & tools,3,

@@ -188,6 +188,8 @@ def calculate_deductions_by_type(rubric, r_deducted):
 
     if not r_deducted:
         return {"hallucination": 0.0, "incompleteness": 0.0}
+    
+    # print(r_deducted)
 
     for r_item in r_deducted.split(","):
         if not r_item.strip():
@@ -196,6 +198,8 @@ def calculate_deductions_by_type(rubric, r_deducted):
         r_number = int(r_item[0]) - 1  # rubric index
         sub_item = ord(r_item[1]) - ord('a')  # subitem index
 
+        # print("subitems:", sub_item)
+        # print("valid rubric range: 0 to", len(rubric)-1)
         sub = rubric[r_number]["subitems"][sub_item]
         pts = sub["points"]
 
@@ -216,21 +220,21 @@ def calculate_deductions_by_type(rubric, r_deducted):
     }
 
 def get_all_deducted():
-    PREFIX = "../artifact/"
+    PREFIX = "rubrics/"
     deduction_summary = defaultdict(lambda: {"hallucination": 0, "incompleteness": 0})
     all_deductions = defaultdict(list)
     col_labels = []
 
-    for LANG in ["java", "python", "cpp"]:
+    for LANG in ["java", "py", "c++"]:
 
         for SAMPLE_NUM in range(1, 6):
             col_labels += [f"{LANG.capitalize()} {SAMPLE_NUM}"]
             f_csv = f"{LANG}{SAMPLE_NUM}.csv"
-            f_results = PREFIX + f"results/rubric-applications/{f_csv}"
-            f_rubrics = PREFIX + f"dataset/{LANG}/rubrics/{SAMPLE_NUM}.json"
+            f_results = f_csv
+            f_rubrics = PREFIX + f"{LANG}/{SAMPLE_NUM}.json"
 
-            if not os.path.exists(f_results):
-                continue
+            # if not os.path.exists(f_results):
+            #     continue
 
             rubric = json.load(open(f_rubrics))
 
@@ -243,7 +247,10 @@ def get_all_deducted():
                     trial_num = row[1]
                     r_deducted = row[2]
 
+
+                    print()
                     # accumulate deduction breakdown
+                    # print(f_rubrics)
                     d = calculate_deductions_by_type(rubric, r_deducted)
                     all_deductions[model].append(d)
 

@@ -5,12 +5,11 @@ import utils
 
 models = ['Claude Opus 4', 'w/o code seg', 'w/ code seg']
 
-lies = utils.get_total_lies()
-
+lies = utils.get_all_deducted()
 
 values = list(lies.values())
-totals = [sum(v) for v in values]
-averages = [sum(v)/len(v) for v in values]
+totals = [sum(v.values()) for v in values]
+averages = [sum(v.values())/len(v) for v in values]
 
 
 print(lies.keys())
