@@ -31,10 +31,11 @@ def get_scores_from_xlsx(xlsx_path):
 
 
 java_scores = get_scores_from_xlsx("java_performance.xlsx")
-#print(java_scores)
+print(java_scores)
 python_scores = get_scores_from_xlsx("python_performance.xlsx")
-#print(python_scores)
+print(python_scores)
 cpp_scores = get_scores_from_xlsx("c++_performance.xlsx")
+print(cpp_scores)
 
 # for each lang, 3 model types
 mean_java = java_scores.mean(axis=1)
@@ -54,7 +55,7 @@ overall_all  = mean_all.mean()
 
 #scores = np.hstack([java_scores, python_scores])
 
-techniques = ["Claude Opus 4", "w/o code seg", "w/ code seg"]
+techniques = ['No tools', 'Prompt w/o context', 'Prompt w/ context']
 
 # Assume first 5 samples = Lang A, next 5 = Lang B
 idx = np.arange(0, 5)
@@ -75,10 +76,10 @@ mean_cpp_sorted    = mean_cpp[sorted_idx]
 mean_all_sorted    = mean_all[sorted_idx]
 
 
-print(mean_java_sorted)
-print(mean_py_sorted)
-print(mean_cpp_sorted)
-print(mean_all_sorted)
+# print(mean_java_sorted)
+# print(mean_py_sorted)
+# print(mean_cpp_sorted)
+# print(mean_all_sorted)
 
 x = np.arange(len(techniques_sorted))
 

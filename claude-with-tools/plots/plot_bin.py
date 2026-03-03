@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Data
-models = ['Claude Opus 4', 'w/o code seg', 'w/ code seg']
+models = ['No tools', 'Prompt w/o context', 'Prompt w/ context']
 
 java = [1, 1, 0]
 python = [1, 3, 4]

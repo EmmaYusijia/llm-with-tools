@@ -34,12 +34,12 @@ def get_tool_types_from_xlsx(xlsx_path):
     return row0_comp1, row0_comp2, row0_comp3, row1_comp1, row1_comp2, row1_comp3
 
 def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
-    green = "#93c5ac"
-    yellow = "#ffbb8f"
-    blue = "#9dc6e0"
-    color1   = green #"#C6DBEF"  # very soft blue
-    color2 = yellow #"#CCEBC5"  # very soft green
-    color3    = blue #"#D9D9F3"  # very soft lavender
+    find = "#003f5c"
+    grep = "#2f4b7c"
+    read = "#665191"
+    color1   = find 
+    color2   = grep 
+    color3   = read
 
     labels = ['Sample 1', 'Sample 2', 'Sample 3', 'Sample 4', 'Sample 5']
 
@@ -56,7 +56,11 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
     ax.set_ylabel('# of tools used')
     ax.set_title(f'Types of tools used in {lang}')
     ax.set_xticks(x)
-    labels = ['w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg']
+    labels = ['A            B           C', 
+              'A            B           C', 
+              'A            B           C', 
+              'A            B           C', 
+              'A            B           C', ]
     ax.set_xticklabels(labels)
     ax.legend()
     plt.savefig(f"{lang}_bar_plot.png", bbox_inches="tight")  # save
@@ -64,7 +68,12 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
 
 
 def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, color2, color3):
-    wo_x = x - 0.5 * width
+    no_tools_x = x - width
+    no_data = [100, 40.28, 66.67, 100, 55.56]
+    ax.plot(no_tools_x, no_data, color='black', linestyle='solid', marker='o', label='No tools')
+
+
+    wo_x = x 
     comp1 = np.array(comp1)
     comp2 = np.array(comp2)
     comp3 = np.array(comp3)
@@ -74,18 +83,16 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(wo_x, comp3, width, bottom = comp1 + comp2, label="read", color=color3)
 
 
-    git_show = np.array([0, 0, 6, 0, 0])
-    edit = np.array([0, 0, 3, 0, 0])
-    cat = np.array([0, 0, 2, 0, 0])
-    python3 = np.array([0, 0, 2, 0, 0])
-    pythonm = np.array([0, 0, 1, 0, 0])
-    git_log = np.array([0, 0, 4, 0, 0])
+    git = np.array([0, 0, 10, 0, 0])
     lso = np.array([0, 0, 0, 0, 3])
+    edit = np.array([0, 0, 3, 0, 0])
+    python = np.array([0, 0, 3, 0, 0])
+    cat = np.array([0, 0, 2, 0, 0])
     pwd = np.array([0, 0, 0, 0, 2])
 
-    arr = [git_show, edit, cat, python3, pythonm, git_log, lso, pwd]
-    labels     = ["git show", "edit", "cat", "python3 -c", "python -m pytest", "git log", "ls", "pwd"]
-    colors     = ["silver", "rosybrown", "lightcoral", "sandybrown", "goldenrod", "darkseagreen", "powderblue", "plum"]
+    arr = [git, lso, edit, python, cat, pwd]
+    labels     = ["git", "ls", "edit", "python", "cat", "pwd"]
+    colors     = ["#a05195", "#d45087", "#f95d6a", "#ff7c43", "#ffa600", "lightgray"]
 
     bottom = comp1 + comp2 + comp3
 
@@ -93,8 +100,10 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
         ax.bar(wo_x, comp, width, bottom=bottom, label=label, color=color)
         bottom += comp  
 
+    wo_data = [100, 85.71, 66.67, 40, 38.1]
+    ax.plot(wo_x, wo_data, color='black', linestyle='dashed', marker='o', label='Prompt w/o context')
 
-    w_x = x + 0.5 * width
+    w_x = x + width
     comp4 = np.array(comp4)
     comp5 = np.array(comp5)
     comp6 = np.array(comp6)
@@ -103,7 +112,10 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(w_x, comp4, width, color=color1)
     ax.bar(w_x, comp5, width, bottom = comp4, color=color2)
     ax.bar(w_x, comp6, width, bottom = comp4 + comp5, color=color3)
-    ax.bar(w_x, ls, width, bottom = comp4 + comp5 + comp6, color="#8fc3c3")
+    ax.bar(w_x, ls, width, bottom = comp4 + comp5 + comp6, color="#a05195")
+
+    wx_data = [100, 90.48, 75, 73.33, 57.14]
+    ax.plot(w_x, wx_data, color='black', linestyle='dotted', marker='o', label='Prompt w/ context')
     
 
 lst1, lst2, lst3, lst4, lst5, lst6 = get_tool_types_from_xlsx("python_tool_types.xlsx")

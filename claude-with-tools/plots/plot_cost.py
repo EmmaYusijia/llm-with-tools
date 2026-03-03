@@ -69,7 +69,7 @@ total_costs = java_costs.sum(axis=1) + python_costs.sum(axis=1)  + cpp_costs.sum
 scores = mean_scores
 costs = total_costs #mean_costs
 
-techniques = ["Claude Opus 4", "w/o code seg", "w/ code seg"]
+techniques = ["No tools", "Prompt w/o context", "Prompt w/ context"]
 
 # Assume first 5 samples = Lang A, next 5 = Lang B
 idx = np.arange(0, 5)
@@ -83,9 +83,9 @@ positions = x * 2.0 - 0.25
 
 
 colors = {
-    "Claude Opus 4":   "royalblue",
-    "w/o code seg": "seagreen",
-    "w/ code seg":   "darkorange",
+    "No tools":   "royalblue",
+    "Prompt w/o context": "seagreen",
+    "Prompt w/ context":   "darkorange",
 }
 
 print(costs)
@@ -156,7 +156,7 @@ plt.xlim(-0.05, 8)
 plt.ylim(40, 80)
 
 #plt.savefig("finding4.png", dpi=300, bbox_inches="tight", pad_inches=0.2)
-plt.savefig("finding4.pdf", format="pdf", bbox_inches="tight")  # save as PNG
+plt.savefig("cost.pdf", format="pdf", bbox_inches="tight")  # save as PNG
 
 
 plt.show()

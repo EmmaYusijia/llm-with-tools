@@ -65,10 +65,10 @@ for lang in lang_list:
 
 
 # Style and labels
-plt.scatter(x1, y1, color='orange', label='w/o code seg')
-plt.scatter(x2, y2, color='blue', label='w/ code seg')
-plt.xlim(0, 10)
-plt.ylim(0, 100)
+plt.scatter(x1, y1, color='orange', label='Prompt w/o context')
+plt.scatter(x2, y2, color='blue', label='Prompt w/ context')
+plt.xlim(-0.1, 10)
+plt.ylim(0, 102)
 plt.ylabel("Score (%)", fontsize=14)
 plt.xlabel("# of tool calls")
 plt.title("performance vs. # of tools called", fontsize=14)
@@ -76,7 +76,7 @@ plt.title("performance vs. # of tools called", fontsize=14)
 # Legend using median line handles
 #median_A = bp_A["medians"][0]
 #median_B = bp_B["medians"][0]
-plt.legend(loc="upper right", fontsize=14)
+plt.legend(loc="lower right", fontsize=14)
 
 
 plt.tight_layout()

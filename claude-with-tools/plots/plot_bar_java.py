@@ -34,12 +34,12 @@ def get_tool_types_from_xlsx(xlsx_path):
     return row0_comp1, row0_comp2, row0_comp3, row1_comp1, row1_comp2, row1_comp3
 
 def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
-    green = "#93c5ac"
-    yellow = "#ffbb8f"
-    blue = "#9dc6e0"
-    color1   = green #"#C6DBEF"  # very soft blue
-    color2 = yellow #"#CCEBC5"  # very soft green
-    color3    = blue #"#D9D9F3"  # very soft lavender
+    find = "#003f5c"
+    grep = "#2f4b7c"
+    read = "#665191"
+    color1   = find 
+    color2   = grep 
+    color3   = read 
 
     labels = ['Sample 1', 'Sample 2', 'Sample 3', 'Sample 4', 'Sample 5']
 
@@ -56,7 +56,11 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
     ax.set_ylabel('# of tools used')
     ax.set_title(f'Types of tools used in {lang}')
     ax.set_xticks(x)
-    labels = ['w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg', 'w/o codeseg w/ codeseg']
+    labels = ['A            B           C', 
+              'A            B           C', 
+              'A            B           C', 
+              'A            B           C', 
+              'A            B           C', ]
     ax.set_xticklabels(labels)
     ax.legend()
     plt.savefig(f"{lang}_bar_plot.png", bbox_inches="tight")  # save
@@ -64,7 +68,11 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
 
 
 def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, color2, color3):
-    wo_x = x - 0.5 * width
+    no_tools_x = x - width
+    no_data = [62.96, 66.67, 80, 83.33, 76.67]
+    ax.plot(no_tools_x, no_data, color='black', linestyle='solid', marker='o', label='No tools')
+
+    wo_x = x
     comp1 = np.array(comp1)
     comp2 = np.array(comp2)
     comp3 = np.array(comp3)
@@ -73,8 +81,11 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(wo_x, comp2, width, bottom = comp1, label="grep", color=color2)
     ax.bar(wo_x, comp3, width, bottom = comp1 + comp2, label="read", color=color3)
 
+    wo_data = [66.67, 90.48, 71.43, 51.85, 0]
+    ax.plot(wo_x, wo_data, color='black', linestyle='dashed', marker='o', label='Prompt w/o context')
 
-    w_x = x + 0.5 * width
+
+    w_x = x + width
     comp4 = np.array(comp4)
     comp5 = np.array(comp5)
     comp6 = np.array(comp6)
@@ -82,6 +93,9 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(w_x, comp4, width, color=color1)
     ax.bar(w_x, comp5, width, bottom = comp4, color=color2)
     ax.bar(w_x, comp6, width, bottom = comp4 + comp5, color=color3)
+
+    wx_data = [59.26, 85.71, 85.71, 70.37, 76.19]
+    ax.plot(w_x, wx_data, color='black', linestyle='dotted', marker='o', label='Prompt w/ context')
 
 
 lst1, lst2, lst3, lst4, lst5, lst6 = get_tool_types_from_xlsx("java_tool_types.xlsx")
