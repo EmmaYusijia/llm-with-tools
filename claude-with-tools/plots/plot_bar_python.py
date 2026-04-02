@@ -34,9 +34,9 @@ def get_tool_types_from_xlsx(xlsx_path):
     return row0_comp1, row0_comp2, row0_comp3, row1_comp1, row1_comp2, row1_comp3
 
 def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
-    find = "#003f5c"
-    grep = "#2f4b7c"
-    read = "#665191"
+    find = "cornflowerblue"
+    grep = "sandybrown"
+    read = "salmon"
     color1   = find 
     color2   = grep 
     color3   = read
@@ -46,7 +46,7 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
     x = np.arange(len(labels)) # the label locations
     width = 0.25 # the width of the bars in a group
 
-    fig, ax = plt.subplots(figsize=(20, 8))
+    fig, ax = plt.subplots(figsize=(20, 12))
 
     
     components(lst1, lst2, lst3, lst4, lst5, lst6, ax, width, x, color1, color2, color3)
@@ -56,11 +56,11 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
     ax.set_ylabel('# of tools used')
     ax.set_title(f'Types of tools used in {lang}')
     ax.set_xticks(x)
-    labels = ['A            B           C', 
-              'A            B           C', 
-              'A            B           C', 
-              'A            B           C', 
-              'A            B           C', ]
+    labels = ['Claude        P               PC', 
+              'Claude        P               PC', 
+              'Claude        P               PC', 
+              'Claude        P               PC',  
+              'Claude        P               PC']
     ax.set_xticklabels(labels)
     ax.legend()
     plt.savefig(f"{lang}_bar_plot.png", bbox_inches="tight")  # save
@@ -68,9 +68,10 @@ def bar_plot(lang, lst1, lst2, lst3, lst4, lst5, lst6):
 
 
 def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, color2, color3):
-    no_tools_x = x - width
+    wo_x = x
+
     no_data = [100, 40.28, 66.67, 100, 55.56]
-    ax.plot(no_tools_x, no_data, color='black', linestyle='solid', marker='o', label='No tools')
+    ax.plot(wo_x, no_data, color='black', linestyle='solid', marker='o', label='No tools')
 
 
     wo_x = x 
@@ -82,7 +83,6 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(wo_x, comp2, width, bottom = comp1, label="grep", color=color2)
     ax.bar(wo_x, comp3, width, bottom = comp1 + comp2, label="read", color=color3)
 
-
     git = np.array([0, 0, 10, 0, 0])
     lso = np.array([0, 0, 0, 0, 3])
     edit = np.array([0, 0, 3, 0, 0])
@@ -92,13 +92,14 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
 
     arr = [git, lso, edit, python, cat, pwd]
     labels     = ["git", "ls", "edit", "python", "cat", "pwd"]
-    colors     = ["#a05195", "#d45087", "#f95d6a", "#ff7c43", "#ffa600", "lightgray"]
+    colors     = ["deepskyblue", "yellowgreen", "paleturquoise", "plum", 'palegoldenrod', 'lightgray']
 
     bottom = comp1 + comp2 + comp3
 
     for comp, label, color in zip(arr, labels, colors):
         ax.bar(wo_x, comp, width, bottom=bottom, label=label, color=color)
         bottom += comp  
+
 
     wo_data = [100, 85.71, 66.67, 40, 38.1]
     ax.plot(wo_x, wo_data, color='black', linestyle='dashed', marker='o', label='Prompt w/o context')
@@ -112,10 +113,10 @@ def components(comp1, comp2, comp3, comp4, comp5, comp6, ax, width, x, color1, c
     ax.bar(w_x, comp4, width, color=color1)
     ax.bar(w_x, comp5, width, bottom = comp4, color=color2)
     ax.bar(w_x, comp6, width, bottom = comp4 + comp5, color=color3)
-    ax.bar(w_x, ls, width, bottom = comp4 + comp5 + comp6, color="#a05195")
+    ax.bar(w_x, ls, width, bottom = comp4 + comp5 + comp6, color="yellowgreen")
 
     wx_data = [100, 90.48, 75, 73.33, 57.14]
-    ax.plot(w_x, wx_data, color='black', linestyle='dotted', marker='o', label='Prompt w/ context')
+    ax.plot(wo_x, wx_data, color='black', linestyle='dotted', marker='o', label='Prompt w/ context')
     
 
 lst1, lst2, lst3, lst4, lst5, lst6 = get_tool_types_from_xlsx("python_tool_types.xlsx")

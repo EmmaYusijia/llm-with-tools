@@ -5,7 +5,7 @@ import utils2
 def plot_deductions():
     """
     Plots a horizontal stacked bar chart showing points deducted
-    for hallucinations vs incompleteness per model/technique.
+    for hallucinations vs omissions per model/technique.
     """
     deduction_summary = utils2.get_all_deducted()
 
@@ -14,14 +14,12 @@ def plot_deductions():
     df = df[["Hallucination", "Omission"]]
 
     df['total'] = df["Omission"] + df["Hallucination"]
-    df = df.sort_values(by="total", ascending=False)
+    # df = df.sort_values(by="total", ascending=False)
     df = df.drop(columns=['total'])
     new_names_mapping = {"w/o code seg w/ tools": "P",
                             "Claude Opus 4": "Claude",
                             "w/ code seg & tools": "PC"}
     df = df.rename(index=new_names_mapping)
-
-    print(df)
 
     # Create horizontal stacked bar chart
     ax = df.plot(
@@ -45,7 +43,7 @@ def plot_deductions():
     ax.tick_params(axis='y', labelsize=16)
     ax.tick_params(axis='x', labelsize=16)
 
-    plt.xlabel("Average Points Per Error Type")
+    plt.xlabel("Average Percentage Points Deducted Per Error Type", fontsize=16)
     #plt.ylabel("Model")
     #plt.title("Average Points by Type of Error")
     plt.legend(title="Error Type", loc="upper right", fontsize=16)
@@ -55,18 +53,19 @@ def plot_deductions():
     for i, (idx, row) in enumerate(df.iterrows()):
         incomp = row["Omission"]
         hall = row["Hallucination"]
+        total = row["Omission"] + row["Hallucination"]
 
-        # Label for incompleteness (at the center of its segment)
-        ax.text(incomp + hall / 2, i, f"{incomp:.1f}", va='center', ha='center', fontsize=16, fontweight='bold')
+        # Label for omissions (at the center of its segment)
+        ax.text(incomp + hall / 2, i, f"{incomp:.1f}", va='center', ha='center', fontsize=16) #, fontweight='bold')
         
         # Label for hallucination (at the center of its segment)
-        ax.text(hall  / 2, i, f"{hall:.1f}", va='center', ha='center', fontsize=16, fontweight='bold')
+        ax.text(hall  / 2, i, f"{hall:.1f}", va='center', ha='center', fontsize=16) #, fontweight='bold')
 
-        total = round(incomp, 1) + round(hall, 1)
-        ax.text(total, i, f"{total:.1f}", va='center', fontsize=16, fontweight='bold')
+        ax.text(total + 0.1, i, f"{total:.1f}", va='center', fontsize=16, fontweight='bold')
 
     plt.savefig("deductions.png")
     plt.savefig("deductions.pdf")
+    plt.savefig("fig6.svg")
 
 plot_deductions()
 

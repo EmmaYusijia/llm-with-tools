@@ -97,7 +97,7 @@ for LANG in ["java", "py", "c++"]:
         f_rubrics = PREFIX + f"{LANG}/{SAMPLE_NUM}.json"
 
         if not os.path.exists(f_results):
-            continue
+            print("warning")
 
         rubric = json.load(open(f_rubrics))
 
@@ -146,7 +146,7 @@ print(f"Questions: {col_labels}")
 
 
 # Get unique categories
-categories = sorted(list(set(question_categories.values())))
+categories = list(set(question_categories.values()))
 
 # Print header
 header = f"{'Model':<30}"
@@ -165,7 +165,7 @@ for i, model in enumerate(techniques):
         category_indices = [j for j, label in enumerate(col_labels)
                           if question_categories.get(label) == category]
         if category_indices:
-            #print(all_scores.shape, category_indices)
+            # print(all_scores.shape, category_indices)
             category_score = all_scores[i, category_indices].mean()
             row += f"{category_score:>6.2f}%               "
         else:
@@ -186,7 +186,7 @@ for category in set(question_categories.values()):
     category_scores = all_scores[:, category_indices]
     category_avg_scores[category] = category_scores.mean()
 
-# Sort categories by average performance (best to worst)
+Sort categories by average performance (best to worst)
 category_order = sorted(category_avg_scores.keys(),
                        key=lambda x: category_avg_scores[x],
                        reverse=True)
@@ -198,7 +198,7 @@ for cat in category_order:
 # Group questions by category (in sorted order)
 grouped_indices = []
 grouped_labels = []
-for category in category_order:
+for category in category_avg_scores:
     # Find all questions in this category
     category_questions = [(i, label) for i, label in enumerate(col_labels)
                          if question_categories.get(label) == category]
@@ -207,7 +207,7 @@ for category in category_order:
     for i, label in category_questions:
         question_avg_scores.append((i, label, all_scores[:, i].mean()))
     # Sort questions within category by average score (best to worst)
-    question_avg_scores.sort(key=lambda x: x[2], reverse=True)
+    # question_avg_scores.sort(key=lambda x: x[2], reverse=True)
     # Add to grouped lists
     for i, label, avg_score in question_avg_scores:
         grouped_indices.append(i)
@@ -220,7 +220,7 @@ all_scores_grouped = all_scores[:, grouped_indices]
 avg_performance = all_scores_grouped.mean(axis=1)
 
 # Sort by average performance
-order = np.argsort(-avg_performance)
+# order = np.argsort(-avg_performance)
 # scores_sorted = all_scores_grouped[order, :]
 # techniques_sorted = [techniques[i] for i in order]
 
@@ -241,7 +241,7 @@ category_spans.append((current_category, start_idx, len(grouped_labels) - 1))
 # Create heatmap with more space at bottom
 fig, ax = plt.subplots(figsize=(15, 12))
 
-img = ax.imshow(all_scores_grouped, aspect='auto', interpolation='nearest',
+img = ax.imshow(all_scores, aspect='auto', interpolation='nearest',
                  vmin=0, vmax=100, cmap="Blues")
 
 # Add separator lines between categories

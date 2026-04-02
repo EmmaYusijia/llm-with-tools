@@ -64,9 +64,14 @@ for lang in lang_list:
     y2.append(scores[1,:])
 
 
+print(x1)
+print(x2)
+print(y1)
+print(y2)
+
 # Style and labels
-plt.scatter(x1, y1, color='orange', label='Prompt w/o context')
-plt.scatter(x2, y2, color='blue', label='Prompt w/ context')
+plt.scatter(x1, y1, color='orange', label='P')
+plt.scatter(x2, y2, color='blue', label='PC')
 plt.xlim(-0.1, 10)
 plt.ylim(0, 102)
 plt.ylabel("Score (%)", fontsize=14)

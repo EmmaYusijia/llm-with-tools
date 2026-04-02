@@ -134,20 +134,18 @@ def get_binary_scores(all_trials):
 
     return binary_scores
 
-
-
 def get_all_scores():
-    PREFIX = "../artifact/"
+    PREFIX = "rubrics/"
     all_lang_scores = defaultdict(list)
     col_labels = []
     for LANG in ["java", "py", "cpp"]:
         all_q_scores = defaultdict(list)
 
         for SAMPLE_NUM in range(1,6):
-            col_labels += [LANG.capitalize() + " " + str(SAMPLE_NUM)]
+            col_labels += [f"{LANG.capitalize()} {SAMPLE_NUM}"]
             f_csv = f"{LANG}{SAMPLE_NUM}.csv"
-            f_results = PREFIX + f"results/rubric-applications/{f_csv}"
-            f_rubrics = PREFIX + f"dataset/{LANG}/rubrics/{SAMPLE_NUM}.json"
+            f_results = f_csv
+            f_rubrics = PREFIX + f"{LANG}/{SAMPLE_NUM}.json"
 
             if not os.path.exists(f_results):
                 continue
@@ -183,13 +181,11 @@ def calculate_deductions_by_type(rubric, r_deducted):
       - incompleteness ("lie": False)
       - hallucination ("lie": True)
     """
-    hallucination_points = 0
-    incompleteness_points = 0
+    if r_deducted.isspace():
+        return {"hallucination": 1.0, "omissions": 1.0}
 
-    if not r_deducted:
-        return {"hallucination": 0.0, "incompleteness": 0.0}
-    
-    # print(r_deducted)
+    r_deducted_only_lies = []
+    r_deducted_only_incomplete = []
 
     for r_item in r_deducted.split(","):
         if not r_item.strip():
@@ -198,30 +194,27 @@ def calculate_deductions_by_type(rubric, r_deducted):
         r_number = int(r_item[0]) - 1  # rubric index
         sub_item = ord(r_item[1]) - ord('a')  # subitem index
 
-        # print("subitems:", sub_item)
-        # print("valid rubric range: 0 to", len(rubric)-1)
         sub = rubric[r_number]["subitems"][sub_item]
         pts = sub["points"]
 
-        # total points possible for this rubric section
-        total = rubric[r_number]["points"]
-
-        # convert to proportional deduction if needed
-        deduction_value = float(pts) / float(total)
-
-        if sub.get("lie", False):
-            hallucination_points += deduction_value
+        if sub.get("lie", True):
+            r_deducted_only_lies.append(r_item)
         else:
-            incompleteness_points += deduction_value
+            r_deducted_only_incomplete.append(r_item)
+
+    #print(r_deducted_only_lies)
+    score_lies = 1-calculate_score(rubric, ",".join(r_deducted_only_lies))
+    score_incomplete = 1-calculate_score(rubric, ",".join(r_deducted_only_incomplete))
 
     return {
-        "hallucination": hallucination_points,
-        "incompleteness": incompleteness_points
+        "hallucination": score_lies,
+        "omissions": score_incomplete
     }
+
 
 def get_all_deducted():
     PREFIX = "rubrics/"
-    deduction_summary = defaultdict(lambda: {"hallucination": 0, "incompleteness": 0})
+    deduction_summary = defaultdict(lambda: {"hallucination": 1, "omissions": 1})
     all_deductions = defaultdict(list)
     col_labels = []
 
@@ -233,8 +226,8 @@ def get_all_deducted():
             f_results = f_csv
             f_rubrics = PREFIX + f"{LANG}/{SAMPLE_NUM}.json"
 
-            # if not os.path.exists(f_results):
-            #     continue
+            if not os.path.exists(f_results):
+                print("warning")
 
             rubric = json.load(open(f_rubrics))
 
@@ -247,27 +240,19 @@ def get_all_deducted():
                     trial_num = row[1]
                     r_deducted = row[2]
 
-
-                    print()
-                    # accumulate deduction breakdown
-                    # print(f_rubrics)
                     d = calculate_deductions_by_type(rubric, r_deducted)
                     all_deductions[model].append(d)
 
-
-    deduction_avg = {}
+    deduction = {}
     for model, deductions in all_deductions.items():
-        if not deductions:
-            continue
 
-        hallucination_avg = sum(d["hallucination"] for d in deductions) / len(deductions) * 100
-        incompleteness_avg = sum(d["incompleteness"] for d in deductions) / len(deductions) * 100
+        hallucination = (sum(d["hallucination"]*100 for d in deductions)) 
+        incompleteness = (sum(d["omissions"]*100 for d in deductions)) 
 
-        deduction_avg[model] = {
-            "hallucination": hallucination_avg,
-            "incompleteness": incompleteness_avg,
+        deduction[model] = {
+            "Hallucination": hallucination/45,
+            "Omission": incompleteness/45,
         }
 
-    #print(deduction_avg)
-    return deduction_avg
+    return deduction
 

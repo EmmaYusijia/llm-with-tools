@@ -69,7 +69,7 @@ total_costs = java_costs.sum(axis=1) + python_costs.sum(axis=1)  + cpp_costs.sum
 scores = mean_scores
 costs = total_costs #mean_costs
 
-techniques = ["No tools", "Prompt w/o context", "Prompt w/ context"]
+techniques = ["Claude", "P", "PC"]
 
 # Assume first 5 samples = Lang A, next 5 = Lang B
 idx = np.arange(0, 5)
@@ -83,9 +83,9 @@ positions = x * 2.0 - 0.25
 
 
 colors = {
-    "No tools":   "royalblue",
-    "Prompt w/o context": "seagreen",
-    "Prompt w/ context":   "darkorange",
+    "Claude":   "royalblue",
+    "P": "seagreen",
+    "PC":   "darkorange",
 }
 
 print(costs)
