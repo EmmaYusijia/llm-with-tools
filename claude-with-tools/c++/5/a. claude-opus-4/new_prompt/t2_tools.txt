@@ -1,0 +1,4 @@
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Framework/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h'}
+Bash {'command': 'find /Users/emmayu/crqbench/projects/mantid -name "SQWLoadingPresenter.h" -type f | head -10', 'description': 'Find the SQWLoadingPresenter header file'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/SQWLoadingPresenter.h'}
+Read {'file_path': '/Users/emmayu/crqbench/projects/mantid/Vates/VatesAPI/inc/MantidVatesAPI/MDEWLoadingPresenter.h'}
